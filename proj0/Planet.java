@@ -1,10 +1,10 @@
 public class Planet {
-	double xxPos;
-	double yyPos;
-	double xxVel;
-	double yyVel;
-	double mass;
-	String imgFileName;
+	private double xxPos;
+	private double yyPos;
+	private double xxVel;
+	private double yyVel;
+	private double mass;
+	private String imgFileName;
 	/**Constructor for the Planet class that takes individual values and creates
 		a new Planet class */
 	public Planet(double xP, double yP, double xV, double yV, double m, String img){
