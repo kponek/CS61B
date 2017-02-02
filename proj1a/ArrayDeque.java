@@ -8,14 +8,14 @@ public class ArrayDeque<Item> {
     public ArrayDeque(){
 
     }
-    public void addFirst(Item){
+    public void addFirst(Item newFirst){
 
     }
-    public void addLast(Item){
+    public void addLast(Item newLast){
 
     }
     public boolean isEmpty(){
-
+        return false;
     }
     public int size(){
         return size;
