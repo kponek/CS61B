@@ -155,30 +155,37 @@ public class ArrayDeque<Item> {
         int beginToLast = last + 1;
         if (last <= first) {
             System.arraycopy(items, first, newItems, 0, firstToEnd);
-            System.arraycopy(items, 0, newItems, firstToEnd, beginToLast);
+            System.arraycopy(items, 0, newItems, firstToEnd, first);
         } else {
             System.arraycopy(items, first, newItems, 0, size);
         }
         nextFirst = newItems.length - 1;
         nextLast = size;
         items = newItems;
-        newItems = null;
     }
     /*public static void main(String[] args) {
-        //int[] x = {7,8,0,0,0,1,2,3,4,5,6};
-        //int[] newX = new int[x.length * 2];
-        //ArrayDeque x = new ArrayDeque();
-        ArrayDeque<Integer> ArrayDeque = new ArrayDeque();
-        ArrayDeque.addFirst(0);
-        System.out.println(ArrayDeque.get(0));
+        ArrayDeque<Integer> ArrayDeque = new ArrayDeque<>();
+        ArrayDeque.addLast(0);
+        System.out.println(ArrayDeque.removeLast())  ;
         ArrayDeque.addFirst(2);
-        ArrayDeque.removeLast();
+        System.out.println(ArrayDeque.get(0))      ;
         ArrayDeque.addFirst(4);
-        ArrayDeque.removeFirst();
-        ArrayDeque.removeLast();
+        ArrayDeque.addFirst(5);
+        System.out.println(ArrayDeque.get(0)  )    ;
         ArrayDeque.addLast(7);
-        System.out.println(ArrayDeque.get(0));
+        System.out.println(ArrayDeque.get(1)  )    ;
         ArrayDeque.addLast(9);
+        ArrayDeque.addLast(10);
+        ArrayDeque.addFirst(11);
+        ArrayDeque.addFirst(12);
+        System.out.println(ArrayDeque.removeLast() )   ;
+        System.out.println(ArrayDeque.removeLast())     ;
+        System.out.println(ArrayDeque.removeLast() )     ;
+        System.out.println(ArrayDeque.get(2))     ;
+        System.out.println(ArrayDeque.removeFirst());
+        System.out.println(ArrayDeque.get(0)  )    ;
+        System.out.println(ArrayDeque.removeFirst());
+        System.out.println(ArrayDeque.get(2));
     }*/
 
 }
