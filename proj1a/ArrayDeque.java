@@ -158,6 +158,21 @@ public class ArrayDeque<Item> {
         nextLast = size;
         items = newItems;
     }
-
+    /*public static void main(String[] args) {
+        //int[] x = {7,8,0,0,0,1,2,3,4,5,6};
+        //int[] newX = new int[x.length * 2];
+        //ArrayDeque x = new ArrayDeque();
+        ArrayDeque<Integer> ArrayDeque = new ArrayDeque();
+        ArrayDeque.addFirst(0);
+        System.out.println(ArrayDeque.get(0));
+        ArrayDeque.addFirst(2);
+        ArrayDeque.removeLast();
+        ArrayDeque.addFirst(4);
+        ArrayDeque.removeFirst();
+        ArrayDeque.removeLast();
+        ArrayDeque.addLast(7);
+        System.out.println(ArrayDeque.get(0));
+        ArrayDeque.addLast(9);
+    }*/
 
 }

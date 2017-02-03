@@ -31,9 +31,7 @@ public class LinkedListDeque<Item> {
 
     public LinkedListDeque() {
         size = 0;
-        sentinel = new StuffNode(null, null, null);
-        sentinel.next = sentinel;
-        sentinel.prev = sentinel;
+        sentinel = null;
     }
 
     public void addFirst(Item newFirst) {
@@ -43,8 +41,17 @@ public class LinkedListDeque<Item> {
             sentinel.prev = sentinel;
         }*/
         //else {
-        sentinel = new StuffNode(newFirst, sentinel, sentinel.prev);
-        sentinel.next.prev = sentinel;
+        //sentinel = new StuffNode(newFirst, sentinel, sentinel.prev);
+        //sentinel.next.prev = sentinel;
+        if (sentinel == null) {
+            sentinel = new StuffNode(newFirst, null, null);
+            sentinel.next = sentinel;
+            sentinel.prev = sentinel;
+        } else {
+            sentinel.prev.next = new StuffNode(newFirst, sentinel, sentinel.prev);
+            sentinel.prev = sentinel.prev.next;
+            sentinel = sentinel.prev;
+        }
         // }
         size++;
     }
@@ -52,10 +59,13 @@ public class LinkedListDeque<Item> {
     public void addLast(Item newLast) {
         //check if the DLList is empty
         //otherwise the DLList is empty so just insert normally
-        if (sentinel.prev != null) {
-            sentinel.prev = new StuffNode(newLast, sentinel, sentinel.prev.prev);
+        if (sentinel == null) {
+            sentinel = new StuffNode(newLast, null, null);
+            sentinel.next = sentinel;
+            sentinel.prev = sentinel;
         } else {
-            sentinel = new StuffNode(newLast, sentinel, sentinel);
+            sentinel.prev.next = new StuffNode(newLast, sentinel, sentinel.prev);
+            sentinel.prev = sentinel.prev.next;
         }
         size++;
     }
@@ -138,4 +148,16 @@ public class LinkedListDeque<Item> {
         }
         return recursiveHelper(index--, curr.next);
     }
+    /*public static void main(String[] args) {
+        LinkedListDeque LinkedListDeque = new LinkedListDeque();
+        LinkedListDeque.addFirst(0);
+        LinkedListDeque.addFirst(-1);
+        LinkedListDeque.addFirst(-2);
+        LinkedListDeque.addFirst(-3);
+        LinkedListDeque.addLast(1);
+        LinkedListDeque.addLast(2);
+        LinkedListDeque.removeFirst();
+        LinkedListDeque.removeLast();
+        //LinkedListDeque.removeLast();
+    }*/
 }
