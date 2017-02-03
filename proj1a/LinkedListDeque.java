@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 /**
  * Created by kevin on 1/30/2017.
  */
@@ -142,7 +144,7 @@ public class LinkedListDeque<Item> {
         }
         StuffNode curr = sentinel;
         while (index > 0) {
-            curr = sentinel.next;
+            curr = curr.next;
             index--;
         }
         return curr.item;
@@ -162,6 +164,11 @@ public class LinkedListDeque<Item> {
 
     /*public static void main(String[] args) {
         LinkedListDeque LinkedListDeque = new LinkedListDeque();
-        LinkedListDeque.removeFirst();
+        LinkedListDeque.addFirst(0);
+        LinkedListDeque.addLast(1);
+        LinkedListDeque.addFirst(2);
+        LinkedListDeque.get(1);
+        LinkedListDeque.addFirst(4);
+        LinkedListDeque.get(2);
     }*/
 }
