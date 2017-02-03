@@ -11,7 +11,7 @@ public class ArrayDeque<Item> {
      * Initialize new ArrayDeque with 8 spaces and nothing inside
      */
     public ArrayDeque() {
-        items = (Item[]) new Object[11];
+        items = (Item[]) new Object[8];
         size = 0;
         nextFirst = 0;
         nextLast = 1;
@@ -29,7 +29,9 @@ public class ArrayDeque<Item> {
         } else {
             nextFirst--;
         }
-        //resize
+        if (size == items.length) {
+            resize(2*items.length);
+        }
     }
 
     /**
@@ -43,6 +45,9 @@ public class ArrayDeque<Item> {
             nextLast = 0;
         } else {
             nextLast++;
+        }
+        if (size == items.length) {
+            resize(2*items.length);
         }
     }
 
@@ -96,7 +101,9 @@ public class ArrayDeque<Item> {
         Item deleted = items[nextFirst];
         items[nextFirst] = null;
         size--;
-        //resize
+        if ((((double) size)/((double)items.length)) < 0.25) {
+            resize(size/2);
+        }
         return deleted;
     }
 
@@ -115,7 +122,9 @@ public class ArrayDeque<Item> {
         Item deleted = items[nextLast];
         items[nextLast] = null;
         size--;
-        //resize
+        if ((((double) size)/((double)items.length)) < 0.25) {
+            resize(size/2);
+        }
         return deleted;
     }
 
@@ -153,7 +162,30 @@ public class ArrayDeque<Item> {
         //int[] x = {7,8,0,0,0,1,2,3,4,5,6};
         //int[] newX = new int[x.length * 2];
         ArrayDeque x = new ArrayDeque();
-        x.addFirst(7);
+        /*x.addLast(0);
+        x.addFirst(1);
+        x.addFirst(2);
+        System.out.println(x.get(2));     // ==> 0
+        x.addLast(4);
+        System.out.println(x.removeLast());      //==> 4
+        x.addFirst(6);
+        x.addLast(7);
+        x.addFirst(8);
+        x.addLast(9);
+        x.addFirst(10);
+        System.out.println(x.removeFirst());     //==> 10
+        System.out.println(x.get(1));      //==> 6
+        x.addFirst(13);
+        x.addFirst(14);
+        x.addFirst(15);
+        System.out.println(x.removeFirst());    // ==> 15
+        x.addFirst(17);
+        x.addLast(18);
+        x.addLast(19);
+        x.addFirst(20);
+        System.out.println(x.removeLast());      //==> 19
+        System.out.println(x.removeLast());      //==> 20*/
+        /*x.addFirst(7);
         x.addLast(8);
         x.addLast(0);
         x.addLast(0);
@@ -164,7 +196,7 @@ public class ArrayDeque<Item> {
         x.addLast(4);
         x.addLast(5);
         x.addLast(6);
-        /*System.out.println(x.get(0));
+        System.out.println(x.get(0));
         System.out.println(x.get(1));
         System.out.println(x.get(2));
         System.out.println(x.get(3));
