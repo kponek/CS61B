@@ -69,8 +69,11 @@ public class ArrayDeque<Item> {
         if (pointer == items.length) {
             pointer = 0;
         }
+        if (pointer == nextLast) {
+            System.out.println(items[pointer] + " ");
+        }
         while (pointer != nextLast) {
-            System.out.print(items[pointer]);
+            System.out.print(items[pointer] + " ");
             pointer++;
             if (pointer == items.length) {
                 pointer = 0;

@@ -74,7 +74,7 @@ public class LinkedListDeque<Item> {
         }
         StuffNode curr = sentinel.next;
         while (curr.item != null) {
-            System.out.print(curr.getItem());
+            System.out.print(curr.getItem() + " ");
             curr = curr.next;
         }
     }
@@ -137,5 +137,10 @@ public class LinkedListDeque<Item> {
             return curr.item;
         }
         return recursiveHelper(index--, curr.next);
+    }
+
+    private void resize(int newSize) {
+        Item[] newItems = (Item []) new Object[newSize];
+        //do this
     }
 }
