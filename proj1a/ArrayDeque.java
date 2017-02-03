@@ -30,7 +30,7 @@ public class ArrayDeque<Item> {
             nextFirst--;
         }
         if (size == items.length) {
-            resize(2*items.length);
+            resize(2 * items.length);
         }
     }
 
@@ -47,7 +47,7 @@ public class ArrayDeque<Item> {
             nextLast++;
         }
         if (size == items.length) {
-            resize(2*items.length);
+            resize(2 * items.length);
         }
     }
 
@@ -101,8 +101,8 @@ public class ArrayDeque<Item> {
         Item deleted = items[nextFirst];
         items[nextFirst] = null;
         size--;
-        if ((((double) size)/((double)items.length)) < 0.25) {
-            resize(size/2);
+        if ((((double) size) / ((double) items.length)) < 0.25 && items.length > 16) {
+            resize(size / 2);
         }
         return deleted;
     }
@@ -122,8 +122,8 @@ public class ArrayDeque<Item> {
         Item deleted = items[nextLast];
         items[nextLast] = null;
         size--;
-        if ((((double) size)/((double)items.length)) < 0.25) {
-            resize(size/2);
+        if ((((double) size) / ((double) items.length)) < 0.25 && items.length > 16) {
+            resize(size / 2);
         }
         return deleted;
     }
@@ -141,7 +141,7 @@ public class ArrayDeque<Item> {
     }
 
     private void resize(int newSize) {
-        Item[] newItems = (Item []) new Object[newSize];
+        Item[] newItems = (Item[]) new Object[newSize];
         int first = nextFirst + 1;
         int last = nextLast - 1;
         if (first == items.length) {
@@ -158,56 +158,6 @@ public class ArrayDeque<Item> {
         nextLast = size;
         items = newItems;
     }
-    public static void main(String[] args) {
-        //int[] x = {7,8,0,0,0,1,2,3,4,5,6};
-        //int[] newX = new int[x.length * 2];
-        ArrayDeque x = new ArrayDeque();
-        /*x.addLast(0);
-        x.addFirst(1);
-        x.addFirst(2);
-        System.out.println(x.get(2));     // ==> 0
-        x.addLast(4);
-        System.out.println(x.removeLast());      //==> 4
-        x.addFirst(6);
-        x.addLast(7);
-        x.addFirst(8);
-        x.addLast(9);
-        x.addFirst(10);
-        System.out.println(x.removeFirst());     //==> 10
-        System.out.println(x.get(1));      //==> 6
-        x.addFirst(13);
-        x.addFirst(14);
-        x.addFirst(15);
-        System.out.println(x.removeFirst());    // ==> 15
-        x.addFirst(17);
-        x.addLast(18);
-        x.addLast(19);
-        x.addFirst(20);
-        System.out.println(x.removeLast());      //==> 19
-        System.out.println(x.removeLast());      //==> 20*/
-        /*x.addFirst(7);
-        x.addLast(8);
-        x.addLast(0);
-        x.addLast(0);
-        x.addLast(0);
-        x.addLast(1);
-        x.addLast(2);
-        x.addLast(3);
-        x.addLast(4);
-        x.addLast(5);
-        x.addLast(6);
-        System.out.println(x.get(0));
-        System.out.println(x.get(1));
-        System.out.println(x.get(2));
-        System.out.println(x.get(3));
-        System.out.println(x.get(4));
-        System.out.println(x.get(5));
-        System.out.println(x.get(6));
-        System.out.println(x.get(7));
-        System.out.println(x.get(8));
-        System.out.println(x.get(9));
-        System.out.println(x.get(10));*/
-        //x.printDeque();
-        //System.arraycopy(x,5,newX,0,8);*/
-    }
+
+
 }
