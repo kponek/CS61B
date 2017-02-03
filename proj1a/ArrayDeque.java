@@ -102,7 +102,7 @@ public class ArrayDeque<Item> {
         Item deleted = items[nextFirst];
         items[nextFirst] = null;
         size--;
-        if ((((double) size) / ((double) items.length)) < 0.25 && items.length > 16) {
+        if ((((double) size) / ((double) items.length)) < 0.25 && items.length > 8) {
             resize(size / 2);
         }
         return deleted;
@@ -123,7 +123,7 @@ public class ArrayDeque<Item> {
         Item deleted = items[nextLast];
         items[nextLast] = null;
         size--;
-        if ((((double) size) / ((double) items.length)) < 0.25 && items.length > 16) {
+        if ((((double) size) / ((double) items.length)) < 0.25 && items.length > 8) {
             resize(size / 2);
         }
         return deleted;
