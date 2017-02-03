@@ -96,10 +96,16 @@ public class LinkedListDeque<Item> {
      */
     public Item removeFirst() {
         //for the case of removing from empty list
-        if (sentinel.next == null) {
+        if (sentinel == null) {
             return null;
         }
         Item removedItem = sentinel.item;
+        //case for when theres only one item in the LinkedListDeque
+        if (size == 1) {
+            size = 0;
+            sentinel = null;
+            return removedItem;
+        }
         sentinel.prev.next = sentinel.next;
         sentinel.next.prev = sentinel.prev;
         sentinel = sentinel.next;
@@ -113,10 +119,16 @@ public class LinkedListDeque<Item> {
      */
     public Item removeLast() {
         //for the case of removing from empty list
-        if (sentinel.prev == null) {
+        if (sentinel == null) {
             return null;
         }
+        //case for when theres only one item in the LinkedListDeque
         Item removedItem = sentinel.prev.item;
+        if (size == 1) {
+            size = 0;
+            sentinel = null;
+            return removedItem;
+        }
         sentinel.prev.prev.next = sentinel;
         sentinel.prev = sentinel.prev.prev;
         size--;
@@ -148,16 +160,8 @@ public class LinkedListDeque<Item> {
         }
         return recursiveHelper(index--, curr.next);
     }
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         LinkedListDeque LinkedListDeque = new LinkedListDeque();
-        LinkedListDeque.addFirst(0);
-        LinkedListDeque.addFirst(-1);
-        LinkedListDeque.addFirst(-2);
-        LinkedListDeque.addFirst(-3);
-        LinkedListDeque.addLast(1);
-        LinkedListDeque.addLast(2);
         LinkedListDeque.removeFirst();
-        LinkedListDeque.removeLast();
-        //LinkedListDeque.removeLast();
-    }*/
+    }
 }
