@@ -141,7 +141,7 @@ public class LinkedListDeque<Item> {
         if (isEmpty() || index >= size) {
             return null;
         }
-        StuffNode curr = sentinel.next;
+        StuffNode curr = sentinel;
         while (index > 0) {
             curr = sentinel.next;
             index--;
@@ -150,7 +150,7 @@ public class LinkedListDeque<Item> {
     }
 
     public Item getRecursive(int index) {
-        return recursiveHelper(index, sentinel.next);
+        return recursiveHelper(index, sentinel);
 
     }
 
@@ -158,10 +158,11 @@ public class LinkedListDeque<Item> {
         if (index == 0) {
             return curr.item;
         }
-        return recursiveHelper(index--, curr.next);
+        return recursiveHelper(index - 1, curr.next);
     }
-    public static void main(String[] args) {
+
+    /*public static void main(String[] args) {
         LinkedListDeque LinkedListDeque = new LinkedListDeque();
         LinkedListDeque.removeFirst();
-    }
+    }*/
 }

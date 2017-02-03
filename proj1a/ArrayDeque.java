@@ -29,6 +29,7 @@ public class ArrayDeque<Item> {
         } else {
             nextFirst--;
         }
+        //resize
         if (size == items.length) {
             resize(2 * items.length);
         }
