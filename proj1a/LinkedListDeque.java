@@ -32,11 +32,20 @@ public class LinkedListDeque<Item> {
     public LinkedListDeque() {
         size = 0;
         sentinel = new StuffNode(null, null, null);
+        sentinel.next = sentinel;
+        sentinel.prev = sentinel;
     }
 
     public void addFirst(Item newFirst) {
+        /*if (sentinel == null) {
+            sentinel = new StuffNode(newFirst, null, null);
+            sentinel.next = sentinel;
+            sentinel.prev = sentinel;
+        }*/
+        //else {
         sentinel = new StuffNode(newFirst, sentinel, sentinel.prev);
         sentinel.next.prev = sentinel;
+        // }
         size++;
     }
 
@@ -61,8 +70,11 @@ public class LinkedListDeque<Item> {
     }
 
     public void printDeque() {
-        StuffNode curr = sentinel;
-        while (curr != null) {
+        if (sentinel.next == null) {
+            return;
+        }
+        StuffNode curr = sentinel.next;
+        while (curr.item != null) {
             System.out.print(curr.getItem());
             curr = curr.next;
         }
