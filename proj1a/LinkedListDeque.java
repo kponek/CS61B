@@ -137,7 +137,6 @@ public class LinkedListDeque<Item> {
     }
 
     public Item get(int index) {
-        //int count = size;
         if (isEmpty() || index >= size) {
             return null;
         }

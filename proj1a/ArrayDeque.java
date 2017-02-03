@@ -153,11 +153,16 @@ public class ArrayDeque<Item> {
         }
         int firstToEnd = items.length - first;
         int beginToLast = last + 1;
-        System.arraycopy(items, first, newItems, 0, firstToEnd);
-        System.arraycopy(items, 0, newItems, firstToEnd, beginToLast);
+        if (last <= first) {
+            System.arraycopy(items, first, newItems, 0, firstToEnd);
+            System.arraycopy(items, 0, newItems, firstToEnd, beginToLast);
+        } else {
+            System.arraycopy(items, first, newItems, 0, size);
+        }
         nextFirst = newItems.length - 1;
         nextLast = size;
         items = newItems;
+        newItems = null;
     }
     /*public static void main(String[] args) {
         //int[] x = {7,8,0,0,0,1,2,3,4,5,6};
