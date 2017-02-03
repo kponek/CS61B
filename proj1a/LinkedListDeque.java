@@ -138,9 +138,4 @@ public class LinkedListDeque<Item> {
         }
         return recursiveHelper(index--, curr.next);
     }
-
-    private void resize(int newSize) {
-        Item[] newItems = (Item []) new Object[newSize];
-        //do this
-    }
 }
