@@ -23,11 +23,13 @@ public class ArrayDeque<Item> {
      */
     public void addFirst(Item newFirst) {
         items[nextFirst] = newFirst;
+        size++;
         if (nextFirst == 0) {
             nextFirst = items.length - 1;
         } else {
             nextFirst--;
         }
+        //resize
     }
 
     /**
@@ -36,6 +38,7 @@ public class ArrayDeque<Item> {
      */
     public void addLast(Item newLast) {
         items[nextLast] = newLast;
+        size++;
         if (nextLast == items.length - 1) {
             nextLast = 0;
         } else {
@@ -63,16 +66,14 @@ public class ArrayDeque<Item> {
      */
     public void printDeque() {
         int pointer = nextFirst + 1;
-        int end = nextLast;
-        if (pointer == items.length - 1) {
+        if (pointer == items.length) {
             pointer = 0;
         }
-        while (pointer != end) {
+        while (pointer != nextLast) {
             System.out.print(items[pointer]);
-            if (pointer == items.length - 1) {
+            pointer++;
+            if (pointer == items.length) {
                 pointer = 0;
-            } else {
-                pointer++;
             }
         }
     }
@@ -83,12 +84,17 @@ public class ArrayDeque<Item> {
      * Return the removed item.
      */
     public Item removeFirst() {
-        if (nextFirst == items.length - 1) {
+        //change pointer
+        nextFirst++;
+        if (nextFirst == items.length) {
             nextFirst = 0;
-        } else {
-            nextFirst++;
         }
-        return items[nextFirst];
+        //null the deleted item and return it
+        Item deleted = items[nextFirst];
+        items[nextFirst] = null;
+        size--;
+        //resize
+        return deleted;
     }
 
     /**
@@ -97,12 +103,17 @@ public class ArrayDeque<Item> {
      * to index length - 1. Return the removed item.
      */
     public Item removeLast() {
-        if (nextLast == 0) {
+        //change pointer
+        nextLast--;
+        if (nextLast < 0) {
             nextLast = items.length - 1;
-        } else {
-            nextLast--;
         }
-        return items[nextLast];
+        //null the deleted item and return it
+        Item deleted = items[nextLast];
+        items[nextLast] = null;
+        size--;
+        //resize
+        return deleted;
     }
 
     public Item get(int index) {

@@ -10,7 +10,7 @@ public class LinkedListDeque<Item> {
         private StuffNode next;
         private StuffNode prev;
 
-        public StuffNode(Item i, StuffNode n, StuffNode p) {
+        StuffNode(Item i, StuffNode n, StuffNode p) {
             item = i;
             next = n;
             prev = p;
@@ -51,11 +51,10 @@ public class LinkedListDeque<Item> {
 
     public void addLast(Item newLast) {
         //check if the DLList is empty
+        //otherwise the DLList is empty so just insert normally
         if (sentinel.prev != null) {
             sentinel.prev = new StuffNode(newLast, sentinel, sentinel.prev.prev);
-        }
-        //otherwise the DLList is empty so just insert normally
-        else {
+        } else {
             sentinel = new StuffNode(newLast, sentinel, sentinel);
         }
         size++;
@@ -120,7 +119,7 @@ public class LinkedListDeque<Item> {
         if (isEmpty() || index >= size) {
             return null;
         }
-        StuffNode curr = sentinel;
+        StuffNode curr = sentinel.next;
         while (index > 0) {
             curr = sentinel.next;
             index--;
@@ -129,7 +128,7 @@ public class LinkedListDeque<Item> {
     }
 
     public Item getRecursive(int index) {
-        return recursiveHelper(index, sentinel);
+        return recursiveHelper(index, sentinel.next);
 
     }
 
