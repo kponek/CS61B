@@ -1,11 +1,12 @@
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** This class represents a sequence of operations. 
-  *
-  * See OperationSequenceDemo.java for an example of how this class
-  * might be used.
-  */
+/**
+ * This class represents a sequence of operations.
+ * <p>
+ * See OperationSequenceDemo.java for an example of how this class
+ * might be used.
+ */
 public class OperationSequence {
 
     private ArrayDequeSolution<DequeOperation> opSequence;
@@ -13,7 +14,9 @@ public class OperationSequence {
     private static final String OP_STRING = "([a-zA-Z]+)\\(([0-9\\-]*)\\)";
     private static final Pattern OP_PATTERN = Pattern.compile(OP_STRING);
 
-    /** Creates an empty failure sequence. */
+    /**
+     * Creates an empty failure sequence.
+     */
     public OperationSequence() {
         opSequence = new ArrayDequeSolution<DequeOperation>();
     }
@@ -23,7 +26,9 @@ public class OperationSequence {
         opSequence.addLast(dequeOp);
     }
 
-    /** Returns a String representation for this OperationSequence. */
+    /**
+     * Returns a String representation for this OperationSequence.
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < opSequence.size(); i += 1) {
@@ -37,7 +42,9 @@ public class OperationSequence {
     /* Code below this line is probably not useful to you. */
 
 
-    /** Creates a OperationSequence from a file. */
+    /**
+     * Creates a OperationSequence from a file.
+     */
     public OperationSequence(String filename) {
         In in = new In(filename);
         opSequence = new ArrayDequeSolution<DequeOperation>();
@@ -49,14 +56,14 @@ public class OperationSequence {
             }
             try {
                 DequeOperation dequeOp;
-                
+
                 String opName = m.group(1);
                 String opArg = m.group(2);
                 if (opArg.length() > 0) {
                     int argument = Integer.parseInt(m.group(2));
                     dequeOp = new DequeOperation(opName, argument);
                 } else {
-                    dequeOp = new DequeOperation(opName);                   
+                    dequeOp = new DequeOperation(opName);
                 }
                 addOperation(dequeOp);
             } catch (Exception e) {
@@ -65,7 +72,9 @@ public class OperationSequence {
         }
     }
 
-    /** Writes this failure case to a file. */
+    /**
+     * Writes this failure case to a file.
+     */
     public void toFile(String filename) {
         Out out = new Out(filename);
         out.print(this.toString());

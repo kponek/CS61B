@@ -1,4 +1,6 @@
-/** Demonstrates how the OperationSequence class works. */
+/**
+ * Demonstrates how the OperationSequence class works.
+ */
 public class OperationSequenceDemo {
     public static void main(String[] args) {
         OperationSequence fs = new OperationSequence();
