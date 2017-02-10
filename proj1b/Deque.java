@@ -2,20 +2,19 @@
  * Created by kevin on 2/9/2017.
  */
 public interface Deque<Item> {
-    public void addFirst(Item i);
+    void addFirst(Item i);
 
-    public void addLast(Item i);
+    void addLast(Item i);
 
-    public boolean isEmpty();
+    boolean isEmpty();
 
-    public int size();
+    int size();
 
-    public void printDeque();
+    void printDeque();
 
-    public Item removeFirst();
+    Item removeFirst();
 
-    public Item removeLast();
+    Item removeLast();
 
-    public Item get(int index);
-
+    Item get(int index);
 }
