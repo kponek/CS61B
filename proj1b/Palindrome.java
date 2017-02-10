@@ -10,7 +10,7 @@ public class Palindrome {
         ArrayDeque<Character> wordDeque = new ArrayDeque<Character>();
         while (word.length() > 0) {
             wordDeque.addFirst(word.charAt(0));
-            word = word.substring(1, word.length() - 1);
+            word = word.substring(1, word.length());
         }
         return wordDeque;
     }
