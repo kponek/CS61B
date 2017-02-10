@@ -4,23 +4,23 @@ ArrayDeque:
 
 Q: Give an example of at least one idea from the staff solution that would have made your solution better (if any).
 
-A: 
+A: I thought the resize method where you just add the empty space before the first and last indexes was nicer. With my implementation, I had to worry about other special cases.
 
 Q: What's something you felt proud of in your code, if anything?
 
-A:
+A: N/A
 
 Q: What's something that was particularly inelegant in your code, if anything?
 
-A:
+A: Every time I decremented the nextFirst or incremented the nextLast, I had the full code in every method. I should have just created a method to do that every time; it would have made my code more smooth.
 
 Q: What do you wish you would have known before writing ArrayDeque, if anything?
 
-A:
+A: I wish I didn't just rush into it and planned my approach.
 
 Q: If you wrote ArrayDeque again, what would you do differently, if anything?
 
-A:
+A: I would start with the add methods, then work my way up slowly from there by testing every step of the way. I just brute forced my way through this and I ended up suffering for that.
 
 -----
 
@@ -28,23 +28,23 @@ LinkedListDeque:
 
 Q: Give an example of at least one idea from the staff solution that would have made your solution better (if any).
 
-A: 
+A: N/A
 
 Q: What's something you felt proud of in your code, if anything?
 
-A:
+A: N/A
 
 Q: What's something that was particularly inelegant in your code, if anything?
 
-A:
+A: Same as ArrayDeque, method for incrementing and decrementing nextFirst and nextLast.
 
 Q: What do you wish you would have known before writing ArrayDeque, if anything?
 
-A:
+A: Java Visualizer that was built into IntelliJ. Also the power of debugging and test methods.
 
 Q: If you wrote LinkedListDeque again, what would you do differently, if anything?
 
-A:
+A: I would have worked my way up slowly with this (even more than ArrayDeque). I would have used the built in Java visualizer more often if I had been more familiar with it before starting.
 
 -----
 
@@ -52,4 +52,4 @@ Meta:
 
 Q: This is the first time we've tried something like this. Did you like this design review process? Anything we should do differently next time?
 
-A: 
+A: Yeah I did like the idea of this, but I really wish it had been better enforced. Some people in lab showed up and left within 15 minutes.
