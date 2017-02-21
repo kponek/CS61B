@@ -1,4 +1,5 @@
 package synthesizer;
+
 import java.util.Iterator;
 
 public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
@@ -35,8 +36,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         // TODO: Enqueue the item. Don't forget to increase fillCount and update last.
         if (rb[last] != null) {
             throw new RuntimeException("Ring buffer overflow");
-        }
-        else {
+        } else {
             rb[last] = x;
             fillCount++;
             lastIncrement();
@@ -56,8 +56,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
             fillCount--;
             firstIncrement();
             return dequeued;
-        }
-        else {
+        } else {
             throw new RuntimeException("Ring buffer underflow");
         }
     }
@@ -71,28 +70,39 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     }
 
     // TODO: When you get to part 5, implement the needed code to support iteration.
+    private class BufferWizard implements Iterator<T> {
+        private int notionOfWhereHeIs;
+
+        public BufferWizard() {
+            notionOfWhereHeIs = 0;
+        }
+
+        public boolean hasNext() {
+            return (notionOfWhereHeIs < fillCount);
+        }
+
+        public T next() {
+            T currentThing = rb[notionOfWhereHeIs];
+            notionOfWhereHeIs++;
+            return currentThing;
+        }
+    }
+
+    public Iterator<T> iterator() {
+        return new BufferWizard();
+    }
+
     private void lastIncrement() {
         last++;
         if (last == capacity) {
             last = 0;
         }
     }
-    private void lastDecrement() {
-        last--;
-        if (last < 0) {
-            last = capacity - 1;
-        }
-    }
+
     private void firstIncrement() {
         first++;
         if (first == capacity) {
-            first =0;
-        }
-    }
-    private void firstDecrement() {
-        first--;
-        if (first < 0) {
-            first = capacity - 1;
+            first = 0;
         }
     }
 }
