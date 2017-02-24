@@ -1,0 +1,87 @@
+CS61B Project 2 Design Ideas
+
+
+class Database {
+private List<Table> tables;
+public String transact(String query)
+}
+
+class Table {
+//instance variables
+private Column[] cols;
+private String name;
+Table(int numRows, int numCols, String[] colNames, String[] colTypes,  Column[] col)
+Table(String[] colNames, String[] colTypes)
+public void insertRow() 
+public String toString() {}
+}
+
+class Column {
+String columnName;
+String dataType;
+private ArrayList<T> data; 
+public Column(String colName, String colType, List colData);
+Public Column(String colName, String colType);
+public void addRow();
+public String toString();
+}
+
+/*class Row {
+private T data;
+public Row(T data);
+}*/
+
+class Interpreter {
+// handles commands
+public Table createTable(String query) {
+// parses through the query and interpret the action
+// will call helper method for the specified action
+}
+public Table createTableHelper(String tableName, String[] columnTypes, String[] columnNames) {}
+ 
+public Table createTableHelper(String tableName, String clause) {}
+public String load(String query) {
+// interpret query to get input filename
+// handle file exceptions
+// insert table data using Table::insertRow()
+// @return empty String on success OR error message
+}
+
+public String store(String query) {
+//use File class in stdlib
+// interpret query to get tablename
+String tableName;
+/* Action: makes a .tbl file, stores the table data
+If .tbl file exists, overwrite that file.
+*/
+ // @return empty String on success OR error message
+}
+
+public String dropTable(String query) {
+// interpret query to get table name
+ // Action: deletes table from database
+ // @return empty String on success OR error message
+}
+
+public String insertInto(String query) {
+// interpret query to get data
+/* Action: Insert given row into named table and type checking on value (if doesn’t pass the type check, error message).
+*/
+ // @return empty String on success OR error message
+}
+
+public String printTable(String query) {
+// interpret query to get the table name
+// lookup the table and call its toString() method
+// return String
+}
+
+public String select(String query) {
+
+// return the String representation of the produced table, or an appropriate error message otherwise
+
+}
+}
+
+
+
