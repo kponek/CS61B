@@ -39,15 +39,15 @@ public class Database {
      * Code skeleton taken from Parse.java provided by Josh Hug
      */
     // Stage 2 syntax, contains the clauses of commands.
-    private static final Pattern CREATE_NEW = Pattern.compile("(\\S+)\\s+\\((\\S+\\s+\\S+\\s*" +
-            "(?:,\\s*\\S+\\s+\\S+\\s*)*)\\)"),
-            SELECT_CLS = Pattern.compile("([^,]+?(?:,[^,]+?)*)\\s+from\\s+" +
-                    "(\\S+\\s*(?:,\\s*\\S+\\s*)*)(?:\\s+where\\s+" +
-                    "([\\w\\s+\\-*/'<>=!]+?(?:\\s+and\\s+" +
-                    "[\\w\\s+\\-*/'<>=!]+?)*))?"),
+    private static final Pattern CREATE_NEW = Pattern.compile("(\\S+)\\s+\\((\\S+\\s+\\S+\\s*"
+            + "(?:,\\s*\\S+\\s+\\S+\\s*)*)\\)"),
+            SELECT_CLS = Pattern.compile("([^,]+?(?:,[^,]+?)*)\\s+from\\s+"
+                    + "(\\S+\\s*(?:,\\s*\\S+\\s*)*)(?:\\s+where\\s+"
+                    + "([\\w\\s+\\-*/'<>=!]+?(?:\\s+and\\s+"
+                    + "[\\w\\s+\\-*/'<>=!]+?)*))?"),
             CREATE_SEL = Pattern.compile("(\\S+)\\s+as select\\s+" + SELECT_CLS.pattern()),
-            INSERT_CLS = Pattern.compile("(\\S+)\\s+values\\s+(.+?" +
-                    "\\s*(?:,\\s*.+?\\s*)*)");
+            INSERT_CLS = Pattern.compile("(\\S+)\\s+values\\s+(.+?"
+                    + "\\s*(?:,\\s*.+?\\s*)*)");
 
     public static String transact(String query) {
         Matcher m;
@@ -104,16 +104,16 @@ public class Database {
     /**
      * Code skeleton taken from Parse.java provided by Josh Hug
      */
-    private static String createSelectedTable(String name, String inExprs, String inTables, String inConds) {
+    private static String createSelectedTable(String name, String inE, String inT, String inC) {
         Pattern p1 = Pattern.compile("\\s+|,");
         Pattern p2 = Pattern.compile(AND);
-        String[] exprs = p1.split(inExprs);
-        String[] tables = p1.split(inTables);
-        String[] conds = p2.split(inConds);
+        String[] exprs = p1.split(inE);
+        String[] tableNames = p1.split(inT);
+        String[] conds = p2.split(inC);
         if (conds == null) {
-            return Handler.createTable(name, Handler.selectTable(tables, exprs));
+            return Handler.createTable(name, Handler.selectTable(tableNames, exprs));
         } else {
-            return Handler.selectTable(tables, exprs, conds);
+            return Handler.selectTable(tableNames, exprs, conds);
         }
     }
 
@@ -141,12 +141,12 @@ public class Database {
         Pattern p1 = Pattern.compile("\\s+|,");
         Pattern p2 = Pattern.compile(AND);
         String[] exprs = p1.split(m.group(1));
-        String[] tables = p1.split(m.group(2));
+        String[] tableNames = p1.split(m.group(2));
         String[] conds = p2.split(m.group(3));
         if (conds == null) {
-            return Handler.selectTable(tables, exprs);
+            return Handler.selectTable(tableNames, exprs);
         } else {
-            return Handler.selectTable(tables, exprs, conds);
+            return Handler.selectTable(tableNames, exprs, conds);
         }
     }
 
