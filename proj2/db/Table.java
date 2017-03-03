@@ -10,7 +10,7 @@ public class Table {
             cols[i] = new Column(colNames[i],colTypes[i],)
         }
     }*/
-    Table(String tableName, String[] colNames, String[] colTypes) {
+    Table(String tableName, String[] colTypes, String[] colNames) {
         cols = new Column[colNames.length];
         name = tableName;
         for (int i = 0; i < colNames.length; i++) {

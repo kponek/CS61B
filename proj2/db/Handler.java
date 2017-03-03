@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class Handler {
     public static String createTable(String tableName, String[] columnTypes, String[] columnNames) {
-        Table table = new Table(tableName, columnNames, columnTypes);
+        Table table = new Table(tableName, columnTypes, columnNames);
         ArrayList<Table> data = Database.getTables();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getName().equals(tableName)) {
