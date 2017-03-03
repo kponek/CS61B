@@ -49,7 +49,7 @@ public class Handler {
             }
         }
         Pattern p2 = Pattern.compile("\\s*,\\s*");
-        dataTable = new Table(tableName, colNames, colTypes);
+        dataTable = new Table(tableName, colTypes, colNames);
         while (inputFile.hasNextLine()) {
             String[] inRow = p2.split(inputFile.readLine());
             dataTable.insertRow(inRow);
@@ -115,11 +115,10 @@ public class Handler {
     }
 
     private static Table join(Table a, Table b) {
-        Table c;
         Column[] aCols = a.getCols();
         Column[] bCols = b.getCols();
         ArrayList<Map<Integer, Integer>> matchingColIndices = new ArrayList<>();
-        ArrayList<Map<Integer, Integer>> matchingRowIndices = new ArrayList<>();
+        ArrayList<Integer> matchingRowIndices = new ArrayList<>();
         //find indices of matching columns
         for (int i = 0; i < aCols.length; i++) {
             for (int j = 0; j < bCols.length; j++) {
@@ -128,6 +127,7 @@ public class Handler {
                 }
             }
         }
+
         //find rows that match
         for (int k = 0; k < matchingColIndices.size(); k++) {
             //get key/value pair
@@ -135,15 +135,13 @@ public class Handler {
                 int value = matchingColIndices.get(k).get(key);
                 //this loop is for a
                 for (int l = 0; l < aCols[0].getSize(); l++) {
-                    //this loop is for b
-                    for (int m = 0; m < bCols[0].getSize(); m++) {
-                        if (aCols[key].getItem(l) == bCols[value].getItem(m)) {
-
-                        }
+                    if (bCols[value].getData().contains(aCols[key].getItem(l))) {
+                        matchingRowIndices.add(l);
                     }
                 }
             }
         }
+        //Table c = new Table("",)
         return new Table("", "");
     }
 }

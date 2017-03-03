@@ -98,7 +98,7 @@ public class Database {
             colNames[i] = line[0];
             colTypes[i] = line[1];
         }
-        return Handler.createTable(name, colNames, colTypes);
+        return Handler.createTable(name, colTypes, colNames);
     }
 
     /**
