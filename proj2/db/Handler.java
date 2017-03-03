@@ -27,14 +27,14 @@ public class Handler {
         ArrayList<Table> data = Database.getTables();
         Table dataTable;
         String regex = "\\s*(,|\\s)\\s*";
-        Pattern p = Pattern.compile(regex);
+        Pattern p1 = Pattern.compile(regex);
         In inputFile;
         try {
             inputFile = new In(tableName + ".tbl");
         } catch (Exception e) {
-            throw new RuntimeException("ERROR: TBL file not found: " + tableName + ".tbl");
+            return "ERROR: TBL file not found: " + tableName + ".tbl";
         }
-        String[] line = p.split(inputFile.readLine());
+        String[] line = p1.split(inputFile.readLine());
         String[] colNames = new String[line.length / 2];
         String[] colTypes = new String[line.length / 2];
         int colCounter = 0;
@@ -48,9 +48,10 @@ public class Handler {
                 colTCounter++;
             }
         }
+        Pattern p2 = Pattern.compile("\\s*,\\s*");
         dataTable = new Table(tableName, colNames, colTypes);
         while (inputFile.hasNextLine()) {
-            String[] inRow = p.split(inputFile.readLine());
+            String[] inRow = p2.split(inputFile.readLine());
             dataTable.insertRow(inRow);
         }
         data.add(dataTable);
