@@ -3,6 +3,7 @@ package db;
 public class Table {
     private Column[] cols;
     private String name;
+
     /*Table(int numRows, int numCols, String[] colNames, String[] colTypes,  Column[] col) {
         cols = new Column[numRows];
         for (int i = 0; i < numCols; i++) {
@@ -16,19 +17,23 @@ public class Table {
             cols[i] = new Column(colNames[i], colTypes[i]);
         }
     }
+
+    Table(String tableName, String selectClause) {
+
+    }
+
     public void insertRow(String[] literals) {
         for (int i = 0; i < cols.length; i++) {
             if (cols[i].getDataType().equals("int")) {
                 cols[i].addRow(Integer.parseInt(literals[i]));
-            }
-            else if (cols[i].getDataType().equals("float")) {
+            } else if (cols[i].getDataType().equals("float")) {
                 cols[i].addRow(Float.parseFloat(literals[i]));
-            }
-            else {
+            } else {
                 cols[i].addRow(literals[i]);
             }
         }
     }
+
     public String toString() {
         String tableString = "";
         if (cols.length == 0) {
@@ -38,8 +43,7 @@ public class Table {
         for (int k = 0; k < cols.length; k++) {
             if (k == 0) {
                 tableString = tableString + cols[k].getColumnName() + " " + cols[k].getDataType();
-            }
-            else {
+            } else {
                 tableString = tableString + "," + cols[k].getColumnName() + " " + cols[k].getDataType();
             }
         }
@@ -49,8 +53,7 @@ public class Table {
             for (int j = 0; j < cols.length; j++) {
                 if (j == 0) {
                     tableString += cols[j].getItem(i);
-                }
-                else {
+                } else {
                     tableString = tableString + "," + cols[j].getItem(i);
                 }
             }
@@ -58,15 +61,19 @@ public class Table {
         }
         return tableString;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String tableName) {
         name = tableName;
     }
+
     public int getRowSize() {
         return cols.length;
     }
+
     public Column[] getCols() {
         return cols;
     }
