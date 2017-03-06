@@ -163,6 +163,85 @@ public class Handler {
         return rtVal;
     }
 
+    private static Table conditions(Table t, String[] cond) {
+        Pattern p3 = Pattern.compile("([']?\\s*\\w+\\s*[']?)"
+                + "(\\s*[><!=]+\\s*)([']?\\s*\\w+\\s*[']?)");
+        TreeSet<Integer> removedRows = new TreeSet<>();
+        for (int i = 0; i < cond.length; i++) {
+            Matcher m;
+            (m = p3.matcher(cond[i])).matches();
+            String first = m.group(1);
+            String op = m.group(2);
+            String second = m.group(3);
+            //compare and filter columns in condition
+            for (int j = 0; j < t.getRowSize(); j++) {
+                if (first.equals(t.getCols()[j].getColumnName())) {
+                    for (int k = t.getCols()[0].getSize() - 1; k >= 0; k--) {
+                        //comparison with string
+                        if (t.getCols()[j].getDataType().equals("string")) {
+                            if (!operator(op, (String) t.getCols()[j].getItem(k), second) || removedRows.contains(k)) {
+                                t.getCols()[j].removeRow(k);
+                                removedRows.add(k);
+                            }
+                        }
+                        //comparison with float
+                        else {
+                            if (!operator(op, (float) t.getCols()[j].getItem(k), Float.valueOf(second)) || removedRows.contains(k)) {
+                                t.getCols()[j].removeRow(k);
+                                removedRows.add(k);
+                            }
+                        }
+                    }
+                }
+            }
+            //remove rest of columns that were removed in filter above
+            for (int j = 0; j < t.getRowSize(); j++) {
+                if (!first.equals(t.getCols()[j].getColumnName())) {
+                    for (int k = t.getCols()[0].getSize() - 1; k >= 0; k--) {
+                        if (removedRows.contains(k)) {
+                            t.getCols()[j].removeRow(k);
+                        }
+                    }
+                }
+            }
+        }
+        return t;
+    }
+
+    private static boolean operator(String op, String val1, String val2) {
+        if (op.equals("==")) {
+            return val1.equals(val2);
+        } else if (op.equals("!=")) {
+            return !val1.equals(val2);
+        } else if (op.equals("<")) {
+            return (val1.compareTo(val2) < 0);
+        } else if (op.equals(">")) {
+            return (val1.compareTo(val2) > 0);
+        } else if (op.equals("<=")) {
+            return (val1.compareTo(val2) <= 0);
+        } else if (op.equals(">=")) {
+            return (val1.compareTo(val2) >= 0);
+        }
+        return false;
+    }
+
+    private static boolean operator(String op, float val1, float val2) {
+        if (op.equals("==")) {
+            return val1 == val2;
+        } else if (op.equals("!=")) {
+            return val1 != val2;
+        } else if (op.equals("<")) {
+            return val1 < val2;
+        } else if (op.equals(">")) {
+            return val1 > val2;
+        } else if (op.equals("<=")) {
+            return val1 <= val2;
+        } else if (op.equals(">=")) {
+            return val1 >= val2;
+        }
+        return false;
+    }
+
     public static String selectTable(String[] tableName, String[] expr, Database db) {
         Table[] tabs = tableNamesToArray(tableName, db);
         Table joined = joinAll(tabs);
