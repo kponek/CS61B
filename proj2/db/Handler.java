@@ -159,8 +159,24 @@ public class Handler {
     }
 
     public static String selectTable(String[] tableName, String[] expr, String[] cond, Database db) {
-        String rtVal = "";
-        return rtVal;
+        Table[] tabs = tableNamesToArray(tableName, db);
+        Table joined = joinAll(tabs);
+        for (String s : expr) {
+            if (s.equals("*")) {
+                return conditions(joined, cond).toString();
+            } else if (expr.length == 1) {
+                for (int i = 0; i < joined.getRowSize(); i++) {
+                    if (s.equals(joined.getCols()[i].getColumnName())) {
+                        return conditions(joined, cond).getCols()[i].toString();
+                    }
+                }
+            } else {
+                Column[] cols = joined.stringToColumnArray(expr);
+                return conditions(joined, cond).selectString(cols);
+            }
+            //TODO: add more cases for multiple column select
+        }
+        return "";
     }
 
     private static Table conditions(Table t, String[] cond) {
