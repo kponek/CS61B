@@ -21,7 +21,42 @@ public class Handler {
     }
 
     public static String createTable(String tableName, String clause, Database db) {
-        //Table table = new Table(tableName, clause);
+        ArrayList<Table> data = db.getTables();
+        Matcher selClause;
+        Pattern ERROR = Pattern.compile("ERROR: " + "\\s*(.*)\\s*");
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getName().equals(tableName)) {
+                return "ERROR: table already exists";
+            }
+        }
+        if ((selClause = ERROR.matcher(clause)).matches()) {
+            return clause;
+        }
+        String[] colTypes;
+        String[] colNames;
+        String[] firstline;
+        String[] lines;
+        Matcher m;
+        Pattern linesplit = Pattern.compile("\\s*\n\\s*");
+        Pattern line1split = Pattern.compile("\\s*,\\s*");
+        Pattern line1Data = Pattern.compile("(\\w+)\\s+(\\w+)");
+        Pattern rowData = Pattern.compile("\\s*,\\s*");
+        lines = linesplit.split(clause);
+        firstline = line1split.split(lines[0]);
+        colNames = new String[firstline.length];
+        colTypes = new String[firstline.length];
+        for (int i = 0; i < firstline.length; i++) {
+            if ((m = line1Data.matcher(firstline[i])).matches()) {
+                colNames[i] = m.group(1);
+                colTypes[i] = m.group(2);
+            }
+        }
+        Table dataTable = new Table(tableName, colTypes, colNames);
+        data.add(dataTable);
+        for (int i = 1; i < lines.length; i++) {
+            String[] inRow = rowData.split(lines[i]);
+            dataTable.insertRow(inRow);
+        }
         return "";
     }
 
@@ -129,9 +164,18 @@ public class Handler {
     }
 
     public static String selectTable(String[] tableName, String[] expr, Database db) {
+        Table[] tabs = tableNamesToArray(tableName, db);
+        Table joined = joinAll(tabs);
         for (String s : expr) {
             if (s.equals("*")) {
-                return joinAll(tableNamesToArray(tableName, db)).toString();
+                return joined.toString();
+            }
+            for (int i = 0; i < joined.getRowSize(); i++) {
+                if (s.equals(joined.getCols()[i].getColumnName())) {
+                    return joined.getCols()[i].toString();
+                    //this only works for the case of one column parameter
+                    //TODO: add more cases for multiple column select
+                }
             }
         }
         return "";
@@ -204,7 +248,7 @@ public class Handler {
         }
         //cartesian product if there are no matching columns
         if (matchingColIndices.size() == 0) {
-            return cartesian(a,b);
+            return cartesian(a, b);
         }
         //find rows that match and store in matchingRowIndices
         for (int k = 0; k < matchingColIndices.size(); k++) {

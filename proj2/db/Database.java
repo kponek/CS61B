@@ -117,7 +117,7 @@ public class Database {
                 + "(\\s*[><!=]+\\s*)([']?\\s*\\w+\\s*[']?)");
         String[] exprs = p1.split(inE);
         String[] tableNames = p1.split(inT);
-        String[] conds = p2.split(inC);
+        String[] conds;
         for (String t : tableNames) {
             int i = Handler.isData(t, this);
             if (i != -1) {
@@ -131,9 +131,10 @@ public class Database {
                 return "ERROR: No table " + t + " in database.";
             }
         }
-        if (conds == null) {
+        if (inC == null) {
             return Handler.createTable(name, Handler.selectTable(tableNames, exprs, this), this);
         } else {
+            conds = p2.split(inC);
             Matcher mConds;
             for (String c : conds) {
                 if (!(mConds = p3.matcher(c)).matches()) {
@@ -198,7 +199,6 @@ public class Database {
         }
         return Handler.selectTable(tableNames, exprs, conds, this);
     }
-
     /*public static void main(String[] args) {
         Database db = new Database();
         Handler.load("T3", db);

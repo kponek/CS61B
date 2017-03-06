@@ -71,7 +71,11 @@ public class Column<T> {
     }
 
     public String toString() {
-        return columnName + data.toString();
+        String s = columnName;
+        for (int i = 0; i < data.size(); i++) {
+            s = s + "\n" + data.get(i);
+        }
+        return s;
     }
 
     public void removeRow(int index) {
