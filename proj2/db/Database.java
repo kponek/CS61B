@@ -5,13 +5,13 @@ import java.util.regex.Matcher;
 import java.util.ArrayList;
 
 public class Database {
-    private static ArrayList<Table> tables;
+    private ArrayList<Table> tables;
 
     public Database() {
         tables = new ArrayList<>();
     }
 
-    public static ArrayList<Table> getTables() {
+    public ArrayList<Table> getTables() {
         return tables;
     }
 
@@ -49,20 +49,21 @@ public class Database {
             INSERT_CLS = Pattern.compile("(\\S+)\\s+values\\s+(.+?"
                     + "\\s*(?:,\\s*.+?\\s*)*)");
 
-    public static String transact(String query) {
+    public String transact(String query) {
         Matcher m;
+
         if ((m = CREATE_CMD.matcher(query)).matches()) {
             return createTable(m.group(1));
         } else if ((m = LOAD_CMD.matcher(query)).matches()) {
-            return Handler.load(m.group(1));
+            return Handler.load(m.group(1), this);
         } else if ((m = STORE_CMD.matcher(query)).matches()) {
-            return Handler.store(m.group(1));
+            return Handler.store(m.group(1), this);
         } else if ((m = DROP_CMD.matcher(query)).matches()) {
-            return Handler.dropTable(m.group(1));
+            return Handler.dropTable(m.group(1), this);
         } else if ((m = INSERT_CMD.matcher(query)).matches()) {
             return insertRow(m.group(1));
         } else if ((m = PRINT_CMD.matcher(query)).matches()) {
-            return Handler.printTable(m.group(1));
+            return Handler.printTable(m.group(1), this);
         } else if ((m = SELECT_CMD.matcher(query)).matches()) {
             return select(m.group(1));
         } else {
@@ -73,7 +74,7 @@ public class Database {
     /**
      * Code skeleton taken from Parse.java provided by Josh Hug
      */
-    private static String createTable(String expr) {
+    private String createTable(String expr) {
         Matcher m;
         if ((m = CREATE_NEW.matcher(expr)).matches()) {
             return createNewTable(m.group(1), m.group(2).split(COMMA));
@@ -88,7 +89,7 @@ public class Database {
     /**
      * Code skeleton taken from Parse.java provided by Josh Hug
      */
-    private static String createNewTable(String name, String[] cols) {
+    private String createNewTable(String name, String[] cols) {
         String regex = "\\s+";
         Pattern p = Pattern.compile(regex);
         String[] colNames = new String[cols.length];
@@ -103,61 +104,105 @@ public class Database {
                 return "ERROR: Incorrect type of data.";
             }
         }
-        return Handler.createTable(name, colTypes, colNames);
+        return Handler.createTable(name, colTypes, colNames, this);
     }
 
     /**
      * Code skeleton taken from Parse.java provided by Josh Hug
      */
-    private static String createSelectedTable(String name, String inE, String inT, String inC) {
-        Pattern p1 = Pattern.compile("\\s+|,");
+    private String createSelectedTable(String name, String inE, String inT, String inC) {
+        Pattern p1 = Pattern.compile(COMMA);
         Pattern p2 = Pattern.compile(AND);
+        Pattern p3 = Pattern.compile("([']?\\s*\\w+\\s*[']?)"
+                + "(\\s*[><!=]+\\s*)([']?\\s*\\w+\\s*[']?)");
         String[] exprs = p1.split(inE);
         String[] tableNames = p1.split(inT);
         String[] conds = p2.split(inC);
+        for (String t : tableNames) {
+            int i = Handler.isData(t, this);
+            if (i != -1) {
+                for (String c : exprs) {
+                    int k = Handler.isColumn(c, i, this);
+                    if (k == -1) {
+                        return "ERROR: No column " + c + " in table.";
+                    }
+                }
+            } else {
+                return "ERROR: No table " + t + " in database.";
+            }
+        }
         if (conds == null) {
-            return Handler.createTable(name, Handler.selectTable(tableNames, exprs));
+            return Handler.createTable(name, Handler.selectTable(tableNames, exprs, this), this);
         } else {
-            return Handler.selectTable(tableNames, exprs, conds);
+            Matcher mConds;
+            for (String c : conds) {
+                if (!(mConds = p3.matcher(c)).matches()) {
+                    return "ERROR: Incorrect condition statement: " + c;
+                }
+            }
+            return Handler.createTable(name,
+                    Handler.selectTable(tableNames, exprs, conds, this), this);
         }
     }
 
     /**
      * Code skeleton taken from Parse.java provided by Josh Hug
      */
-    private static String insertRow(String expr) {
+    private String insertRow(String expr) {
         Matcher m = INSERT_CLS.matcher(expr);
         if (!m.matches()) {
             return "ERROR: Malformed insert: " + expr + "\n";
         }
         Pattern p = Pattern.compile(",");
         String[] literals = p.split(m.group(2));
-        return Handler.insertInto(m.group(1), literals);
+        return Handler.insertInto(m.group(1), literals, this);
     }
 
     /**
      * Code skeleton taken from Parse.java provided by Josh Hug
      */
-    private static String select(String expr) {
+    private String select(String expr) {
         Matcher m = SELECT_CLS.matcher(expr);
         if (!m.matches()) {
             return "ERROR: Malformed select: " + expr + "\n";
         }
-        Pattern p1 = Pattern.compile("\\s+|,");
+        Pattern p1 = Pattern.compile(COMMA);
         Pattern p2 = Pattern.compile(AND);
+        Pattern p3 = Pattern.compile("([']?\\s*\\w+\\s*[']?)"
+                + "(\\s*[><!=]+\\s*)([']?\\s*\\w+\\s*[']?)");
         String[] exprs = p1.split(m.group(1));
         String[] tableNames = p1.split(m.group(2));
+        for (String t : tableNames) {
+            int i = Handler.isData(t, this);
+            if (i != -1) {
+                for (String c : exprs) {
+                    int k = Handler.isColumn(c, i, this);
+                    if (k == -1) {
+                        return "ERROR: No column " + c + " in table.";
+                    }
+                }
+            } else {
+                return "ERROR: No table " + t + " in database.";
+            }
+        }
         String conditions = m.group(3);
         if (conditions == null) {
-            return Handler.selectTable(tableNames, exprs);
+            return Handler.selectTable(tableNames, exprs, this);
         }
         String[] conds = p2.split(conditions);
-        return Handler.selectTable(tableNames, exprs, conds);
+        Matcher mConds;
+        for (String c : conds) {
+            if (!(mConds = p3.matcher(c)).matches()) {
+                return "ERROR: Incorrect condition statement: " + c;
+            }
+        }
+        return Handler.selectTable(tableNames, exprs, conds, this);
     }
+
     public static void main(String[] args) {
         Database db = new Database();
-        Handler.load("T7");
-        Handler.load("T8");
-        System.out.println(Handler.join(tables.get(0),tables.get(1)).toString());
+        Handler.load("T3", db);
+        Handler.load("T6", db);
+        System.out.println(Handler.cartesian(db.getTables().get(0), db.getTables().get(1)).toString());
     }
 }

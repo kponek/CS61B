@@ -26,10 +26,6 @@ public class Table {
         cols = c;
     }
 
-    Table(String tableName, String selectClause) {
-
-    }
-
     public String insertRow(String[] literals) {
         for (int i = 0; i < cols.length; i++) {
             if (!literals[i].equals("NOVALUE")) {
