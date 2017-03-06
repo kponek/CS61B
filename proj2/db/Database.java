@@ -280,8 +280,8 @@ public class Database {
         String[] tableName = {"T3"};
         String[] exprs = {"TeamName", "Season", "Wins", "Losses"};
         String[] conds = {"Wins != Losses", "Losses > 6", "Season < 2015"};
-        System.out.println(db.transact("select TeamName,Season,Wins," +
-                "Losses from T3 where Wins != Losses and Losses > 6 and Season < 2015"));
+        System.out.println(db.transact("select TeamName,Season,Wins,"
+                + "Losses from T3 where Wins != Losses and Losses > 6 and Season < 2015"));
         System.out.println(Handler.selectTable(tableName, exprs, conds, db));
         //String[] tableName, String[] expr, String[] cond, Database db
         //Handler.load("T6", db);

@@ -174,14 +174,14 @@ public class Table {
     }
 
     public String formatString(String val1, String val2) {
-        Pattern p = Pattern.compile("([^']\\s*\\S*(\\s*\\S*)+[^'])");
+        Pattern p = Pattern.compile("(')(\\s*\\S*(\\s*\\S*)+)(')");
         Matcher m1 = p.matcher(val1);
         Matcher m2 = p.matcher(val2);
         String v1 = "";
         String v2 = "";
         if (m2.matches() && m1.matches()) {
-            v1 = m1.group(1);
-            v2 = m2.group(1);
+            v1 = m1.group(2);
+            v2 = m2.group(2);
         }
         return "'" + v1 + v2 + "'";
     }

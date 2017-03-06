@@ -73,6 +73,9 @@ public class Handler {
         } catch (Exception e) {
             return "ERROR: TBL file not found: " + tableName + ".tbl";
         }
+        if (!inputFile.hasNextLine()) {
+            return "ERROR: empty table.";
+        }
         String[] line = p.split(inputFile.readLine());
         String[] colNames = new String[line.length];
         String[] colTypes = new String[line.length];
