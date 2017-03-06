@@ -130,37 +130,10 @@ public class Database {
                     if ((m1 = p4.matcher(c)).matches()) {
                         int g1 = Handler.isColumn(m1.group(1), i, this);
                         int g2 = Handler.isColumn(m1.group(3), i, this);
-                        if (g1 != -1 && g2 != -1) {
-                            String g1Type = data.get(i).getCols()[g1].getDataType();
-                            String g2Type = data.get(i).getCols()[g2].getDataType();
-                            if ((g1Type.equals("string") | g2Type.equals("string"))
-                                    && !g1Type.equals(g2Type)) {
-                                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
-                            }
-                        } else if (g1 == -1 && g2 != -1) {
-                            String g2Type = data.get(i).getCols()[g2].getDataType();
-                            String g1Type = typeCheck(m1.group(1));
-                            if (g1Type.equals("")) {
-                                return "ERROR: malformed data input." + m1.group(1);
-                            }
-                            if ((g1Type.equals("string") | g2Type.equals("string"))
-                                    && !g1Type.equals(g2Type)) {
-                                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
-                            }
-                        } else if (g1 != -1) {
-                            String g1Type = data.get(i).getCols()[g1].getDataType();
-                            String g2Type = typeCheck(m1.group(3));
-                            if (g2Type.equals("")) {
-                                return "ERROR: malformed data input: " + m1.group(3);
-                            }
-                            if ((g1Type.equals("string") | g2Type.equals("string"))
-                                    && !g1Type.equals(g2Type)) {
-                                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
-                            }
-
-                        } else {
-                            return "ERROR: trying to combine literals in select: " + m1.group(1)
-                                    + " " + m1.group(3);
+                        String val = expressionTypeCheck(g1, g2, m1.group(1),
+                                m1.group(3), i, m1.group(2));
+                        if (!val.equals("")) {
+                            return val;
                         }
                     } else {
                         int k = Handler.isColumn(c, i, this);
@@ -204,7 +177,6 @@ public class Database {
      * Code skeleton taken from Parse.java provided by Josh Hug
      */
     private String select(String expr) {
-        ArrayList<Table> data = getTables();
         Matcher m = SELECT_CLS.matcher(expr);
         if (!m.matches()) {
             return "ERROR: Malformed select: " + expr + "\n";
@@ -226,37 +198,10 @@ public class Database {
                     if ((m1 = p4.matcher(c)).matches()) {
                         int g1 = Handler.isColumn(m1.group(1), i, this);
                         int g2 = Handler.isColumn(m1.group(3), i, this);
-                        if (g1 != -1 && g2 != -1) {
-                            String g1Type = data.get(i).getCols()[g1].getDataType();
-                            String g2Type = data.get(i).getCols()[g2].getDataType();
-                            if ((g1Type.equals("string") | g2Type.equals("string"))
-                                    && !g1Type.equals(g2Type)) {
-                                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
-                            }
-                        } else if (g1 == -1 && g2 != -1) {
-                            String g2Type = data.get(i).getCols()[g2].getDataType();
-                            String g1Type = typeCheck(m1.group(1));
-                            if (g1Type.equals("")) {
-                                return "ERROR: malformed data input." + m1.group(1);
-                            }
-                            if ((g1Type.equals("string") | g2Type.equals("string"))
-                                    && !g1Type.equals(g2Type)) {
-                                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
-                            }
-                        } else if (g1 != -1) {
-                            String g1Type = data.get(i).getCols()[g1].getDataType();
-                            String g2Type = typeCheck(m1.group(3));
-                            if (g2Type.equals("")) {
-                                return "ERROR: malformed data input: " + m1.group(3);
-                            }
-                            if ((g1Type.equals("string") | g2Type.equals("string"))
-                                    && !g1Type.equals(g2Type)) {
-                                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
-                            }
-
-                        } else {
-                            return "ERROR: trying to combine literals in select: " + m1.group(1)
-                                    + " " + m1.group(3);
+                        String val = expressionTypeCheck(g1, g2, m1.group(1),
+                                m1.group(3), i, m1.group(2));
+                        if (!val.equals("")) {
+                            return val;
                         }
                     } else {
                         int k = Handler.isColumn(c, i, this);
@@ -282,6 +227,48 @@ public class Database {
         return Handler.selectTable(tableNames, exprs, conds, this);
     }
 
+    private String expressionTypeCheck(int g1, int g2, String lit1, String lit2, int index, String op) {
+        ArrayList<Table> data = getTables();
+        String g1Type;
+        String g2Type;
+        if (g1 != -1 && g2 != -1) {
+            g1Type = data.get(index).getCols()[g1].getDataType();
+            g2Type = data.get(index).getCols()[g2].getDataType();
+            if ((g1Type.equals("string") | g2Type.equals("string"))
+                    && !g1Type.equals(g2Type)) {
+                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
+            }
+        } else if (g1 == -1 && g2 != -1) {
+            g2Type = data.get(index).getCols()[g2].getDataType();
+            g1Type = typeCheck(lit1);
+            if (g1Type.equals("")) {
+                return "ERROR: malformed data input." + lit1;
+            }
+            if ((g1Type.equals("string") | g2Type.equals("string"))
+                    && !g1Type.equals(g2Type)) {
+                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
+            }
+        } else if (g1 != -1) {
+            g1Type = data.get(index).getCols()[g1].getDataType();
+            g2Type = typeCheck(lit2);
+            if (g2Type.equals("")) {
+                return "ERROR: malformed data input: " + lit2;
+            }
+            if ((g1Type.equals("string") | g2Type.equals("string"))
+                    && !g1Type.equals(g2Type)) {
+                return "ERROR: Trying to combine " + g1Type + " with " + g2Type;
+            }
+
+        } else {
+            return "ERROR: trying to combine literals in select: " + lit1
+                    + " " + lit2;
+        }
+        if (g1Type.equals("string") && g2Type.equals("string") && !op.equals("+")) {
+            return "ERROR: Cannot manipulate strings in that way.";
+        }
+        return "";
+    }
+
     private String typeCheck(String matcher) {
         if (matcher.matches("[-+]?\\d+")) {
             return "int";
@@ -302,10 +289,11 @@ public class Database {
         System.out.println("Mets".compareTo("Mets"));
         System.out.println("Patriots".compareTo("Mets"));*/
         Database db = new Database();
-        Handler.load("T3", db);
-        String[] tableName = {"T3"};
+        Handler.load("T6", db);
+        String[] tableName = {"T6"};
         String[] exprs = {"TeamName", "Season", "Wins", "Losses"};
-        String[] conds = {"Wins >= Losses", "TeamName > \'Mets\'"};
+        String[] conds = {"Wins != Losses", "Losses > 6", "Season < 2015"};
+        db.transact("select TeamName,Season,Wins,Losses from T6 where Wins != Losses and Losses > 6 and Season < 2015");
         System.out.println(Handler.selectTable(tableName, exprs, conds, db));
         //String[] tableName, String[] expr, String[] cond, Database db
         //Handler.load("T6", db);

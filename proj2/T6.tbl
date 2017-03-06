@@ -1,3 +1,4 @@
-a int,b int
-7,0
-2,8
+TeamName string,Season int,Wins int,Losses int
+'Golden Bears',2014,5,7
+'Mets',2014,79,83
+'Mets',2013,74,88
