@@ -195,9 +195,17 @@ public class Handler {
                     for (int k = t.getCols()[0].getSize() - 1; k >= 0; k--) {
                         //comparison with string
                         if (t.getCols()[j].getDataType().equals("string")) {
-                            if (!operator(op, (String) t.getCols()[j].getItem(k), second) || removedRows.contains(k)) {
-                                t.getCols()[j].removeRow(k);
-                                removedRows.add(k);
+                            if (t.getColNames().contains(second)) {
+                                if (!operator(op, (String) t.getCols()[j].getItem(k),
+                                        (String) t.getCols()[t.getColNames().indexOf(second)].getItem(k)) || removedRows.contains(k)) {
+                                    t.getCols()[j].removeRow(k);
+                                    removedRows.add(k);
+                                }
+                            } else {
+                                if (!operator(op, (String) t.getCols()[j].getItem(k), second) || removedRows.contains(k)) {
+                                    t.getCols()[j].removeRow(k);
+                                    removedRows.add(k);
+                                }
                             }
                         }
                         //comparison with float

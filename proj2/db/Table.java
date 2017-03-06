@@ -2,6 +2,7 @@ package db;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.*;
 
 public class Table {
     private Column[] cols;
@@ -222,5 +223,13 @@ public class Table {
 
     public Column[] getCols() {
         return cols;
+    }
+
+    public ArrayList<String> getColNames() {
+        ArrayList<String> colNames = new ArrayList<>();
+        for (int i = 0; i < cols.length; i++) {
+            colNames.add(cols[i].getColumnName());
+        }
+        return colNames;
     }
 }
