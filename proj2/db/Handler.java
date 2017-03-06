@@ -229,8 +229,11 @@ public class Handler {
         restTables[0] = joined;
         return joinAll(restTables);
     }
-
     public static Table join(Table a, Table b) {
+        //self join
+        if (a.equals(b)) {
+            return a;
+        }
         Column[] aCols = a.getCols();
         Column[] bCols = b.getCols();
         //tree map keeps keys in order --> can iterate through it
