@@ -71,7 +71,7 @@ public class Column<T> {
     }
 
     public String toString() {
-        String s = columnName;
+        String s = columnName + " " + dataType;
         for (int i = 0; i < data.size(); i++) {
             s = s + "\n" + data.get(i);
         }

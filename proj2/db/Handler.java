@@ -175,6 +175,9 @@ public class Handler {
                         return joined.getCols()[i].toString();
                     }
                 }
+            } else {
+                Column[] cols = joined.stringToColumnArray(expr);
+                return joined.selectString(cols);
             }
             //TODO: add more cases for multiple column select
         }

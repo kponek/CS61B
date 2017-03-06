@@ -82,6 +82,47 @@ public class Table {
         return tableString;
     }
 
+    public Column[] stringToColumnArray(String[] str) {
+        Column[] colArr = new Column[str.length];
+        for (int j = 0; j < str.length; j++) {
+            for (int i = 0; i < cols.length; i++) {
+                if (str[j].equals(cols[i].getColumnName())) {
+                    colArr[j] = new Column(str[j], cols[i].getDataType(), cols[i].getData());
+                }
+            }
+        }
+        return colArr;
+    }
+
+    public String selectString(Column[] col) {
+        String tableString = "";
+        int count = 0;
+        for (Column c : col) {
+            if (count == 0) {
+                tableString = tableString + c.getColumnName() + " " + c.getDataType();
+                count++;
+            } else {
+                tableString = tableString + "," + c.getColumnName() + " " + c.getDataType();
+            }
+        }
+        for (int i = 0; i < cols[0].getSize(); i++) {
+            for (int j = 0; j < col.length; j++) {
+                if (j == 0 & col[j].getDataType().equals("float")
+                        & !col[j].getItem(i).equals("NOVALUE")) {
+                    tableString += "\n" + floatFormat((String) col[j].getItem(i));
+                } else if (j == 0) {
+                    tableString += "\n" + col[j].getItem(i);
+                } else if (col[j].getDataType().equals("float")
+                        & !col[j].getItem(i).equals("NOVALUE")) {
+                    tableString = tableString + "," + floatFormat((String) col[j].getItem(i));
+                } else {
+                    tableString = tableString + "," + col[j].getItem(i);
+                }
+            }
+        }
+        return tableString;
+    }
+
     private String floatFormat(String ff) {
         Pattern BACKDEC = Pattern.compile("(-|\\+)?(\\d+)(\\.)");
         Pattern FRONTDEC = Pattern.compile("(-|\\+)?(\\.)(\\d+)");
