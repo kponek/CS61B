@@ -213,8 +213,6 @@ public class Handler {
                         }
                         //comparison with float
                         else {
-                            float test1 = Float.valueOf((String) t.getCols()[j].getItem(k));
-                            float test2 = Float.valueOf((String) t.getCols()[t.getColNames().indexOf(second)].getItem(k));
                             if (t.getColNames().contains(second)) {
                                 if (!operator(op, Float.valueOf((String) t.getCols()[j].getItem(k)), Float.valueOf((String) t.getCols()[t.getColNames().indexOf(second)].getItem(k))) || removedRows.contains(k)) {
                                     t.getCols()[j].removeRow(k);
