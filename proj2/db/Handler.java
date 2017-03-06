@@ -171,18 +171,28 @@ public class Handler {
                     }
                 }
             } else {
-                Column[] cols = joined.stringToColumnArray(expr);
-                return conditions(joined, cond).selectString(cols);
+                Table j = copyTable(joined);
+                Column[] cols = j.stringToColumnArray(expr);
+                return conditions(j, cond).selectString(cols);
             }
             //TODO: add more cases for multiple column select
         }
         return "";
     }
 
+    private static Table copyTable(Table tab) {
+        //create copy table to not mutate old table
+        Table t = new Table(tab.getName(), new Column[tab.getRowSize()]);
+        for (int i = 0; i < t.getRowSize(); i++) {
+            t.getCols()[i] = new Column(tab.getCols()[i].getColumnName(), tab.getCols()[i].getDataType());
+            t.getCols()[i].setData(tab.getCols()[i].getData());
+        }
+        return t;
+    }
+
     private static Table conditions(Table t, String[] cond) {
         Pattern p3 = Pattern.compile("([']?\\w+[']?)\\s*"
                 + "([><!=]+)\\s*([']?\\s*\\w+\\s*[']?)");
-        //TreeSet<Integer> removedRows = new TreeSet<>();
         for (int i = 0; i < cond.length; i++) {
             TreeSet<Integer> removedRows = new TreeSet<>();
             Matcher m;
@@ -213,12 +223,16 @@ public class Handler {
                         }
                         //comparison with float
                         else {
+                            //float test1 = Float.valueOf((String) t.getCols()[j].getItem(k));
+                            //float test2 = Float.valueOf((String) t.getCols()[t.getColNames().indexOf(second)].getItem(k));
                             if (t.getColNames().contains(second)) {
                                 if (!operator(op, Float.valueOf((String) t.getCols()[j].getItem(k)), Float.valueOf((String) t.getCols()[t.getColNames().indexOf(second)].getItem(k))) || removedRows.contains(k)) {
                                     t.getCols()[j].removeRow(k);
                                     removedRows.add(k);
                                 }
                             } else {
+                                float test1 = Float.valueOf((String) t.getCols()[j].getItem(k));
+                                float test2 = Float.valueOf(second);
                                 if (!operator(op, Float.valueOf((String) t.getCols()[j].getItem(k)), Float.valueOf(second)) || removedRows.contains(k)) {
                                     t.getCols()[j].removeRow(k);
                                     removedRows.add(k);
@@ -279,10 +293,11 @@ public class Handler {
     public static String selectTable(String[] tableName, String[] expr, Database db) {
         Table[] tabs = tableNamesToArray(tableName, db);
         Table joined = joinAll(tabs);
+        Pattern p = Pattern.compile("\\s*\\w+\\s*");
         for (String s : expr) {
             if (s.equals("*")) {
                 return joined.toString();
-            } else if (expr.length == 1) {
+            } else if (expr.length == 1 && p.matcher(expr[0]).matches()) {
                 for (int i = 0; i < joined.getRowSize(); i++) {
                     if (s.equals(joined.getCols()[i].getColumnName())) {
                         return joined.getCols()[i].toString();

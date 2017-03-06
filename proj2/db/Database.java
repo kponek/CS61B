@@ -1,8 +1,8 @@
 package db;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Database {
     private ArrayList<Table> tables;
@@ -227,7 +227,8 @@ public class Database {
         return Handler.selectTable(tableNames, exprs, conds, this);
     }
 
-    private String expressionTypeCheck(int g1, int g2, String lit1, String lit2, int index, String op) {
+    private String expressionTypeCheck(int g1, int g2, String lit1,
+                                       String lit2, int index, String op) {
         ArrayList<Table> data = getTables();
         String g1Type;
         String g2Type;
@@ -240,7 +241,7 @@ public class Database {
             }
         } else if (g1 == -1 && g2 != -1) {
             g2Type = data.get(index).getCols()[g2].getDataType();
-            g1Type = typeCheck(lit1);
+            g1Type = Table.typeCheck(lit1);
             if (g1Type.equals("")) {
                 return "ERROR: malformed data input." + lit1;
             }
@@ -250,7 +251,7 @@ public class Database {
             }
         } else if (g1 != -1) {
             g1Type = data.get(index).getCols()[g1].getDataType();
-            g2Type = typeCheck(lit2);
+            g2Type = Table.typeCheck(lit2);
             if (g2Type.equals("")) {
                 return "ERROR: malformed data input: " + lit2;
             }
@@ -269,31 +270,18 @@ public class Database {
         return "";
     }
 
-    private String typeCheck(String matcher) {
-        if (matcher.matches("[-+]?\\d+")) {
-            return "int";
-        } else if (matcher.matches("[-+]?\\d+\\.")
-                | matcher.matches("[-+]?\\.\\d+")
-                | matcher.matches("[-+]?\\d+\\.\\d+")) {
-            return "float";
-        } else if (matcher.matches("\'\\s*\\S*(\\s*\\S*)+\'")) {
-            return "string";
-        } else {
-            return "";
-        }
-    }
-
     public static void main(String[] args) {
         /*System.out.println("Steelers".compareTo("Mets"));
         System.out.println("Golden Bears".compareTo("Mets"));
         System.out.println("Mets".compareTo("Mets"));
         System.out.println("Patriots".compareTo("Mets"));*/
         Database db = new Database();
-        Handler.load("T6", db);
-        String[] tableName = {"T6"};
+        Handler.load("T3", db);
+        String[] tableName = {"T3"};
         String[] exprs = {"TeamName", "Season", "Wins", "Losses"};
         String[] conds = {"Wins != Losses", "Losses > 6", "Season < 2015"};
-        db.transact("select TeamName,Season,Wins,Losses from T6 where Wins != Losses and Losses > 6 and Season < 2015");
+        System.out.println(db.transact("select TeamName,Season,Wins," +
+                "Losses from T3 where Wins != Losses and Losses > 6 and Season < 2015"));
         System.out.println(Handler.selectTable(tableName, exprs, conds, db));
         //String[] tableName, String[] expr, String[] cond, Database db
         //Handler.load("T6", db);

@@ -1,8 +1,8 @@
 package db;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.*;
 
 public class Table {
     private Column[] cols;
@@ -85,14 +85,119 @@ public class Table {
 
     public Column[] stringToColumnArray(String[] str) {
         Column[] colArr = new Column[str.length];
+        Pattern p = Pattern.compile("([']?\\w+\\.?\\w*[']?)"
+                + "\\s*([\\+\\*\\-/]+)\\s*([']?\\w+\\.?\\w*[']?)"
+                + "\\s*as\\s*(\\w+)");
+        Matcher m;
         for (int j = 0; j < str.length; j++) {
             for (int i = 0; i < cols.length; i++) {
                 if (str[j].equals(cols[i].getColumnName())) {
                     colArr[j] = new Column(str[j], cols[i].getDataType(), cols[i].getData());
                 }
             }
+            if ((m = p.matcher(str[j])).matches()) {
+                ArrayList<String> newCol = new ArrayList<>();
+                int first = -1;
+                int second = -1;
+                String operand1 = m.group(1);
+                String operator = m.group(2);
+                String operand2 = m.group(3);
+                String tablName = m.group(4);
+                String opVal1;
+                String opVal2;
+                String rtval = "";
+                for (int k = 0; k < cols.length; k++) {
+                    if (operand1.equals(cols[k].getColumnName())) {
+                        first = k;
+                    } else if (operand2.equals(cols[k].getColumnName())) {
+                        second = k;
+                    }
+                }
+                for (int l = 0; l < cols[j].getSize(); l++) {
+                    if (first != -1 && second != -1) {
+                        opVal1 = cols[first].getDataType();
+                        opVal2 = cols[second].getDataType();
+                        rtval = addType(opVal1, opVal2, operator, newCol, first, second, l);
+                    } else if (first != -1) {
+                        opVal1 = cols[first].getDataType();
+                        opVal2 = typeCheck(operand2);
+                        rtval = addType(opVal1, opVal2, operator, newCol, first, second, l);
+                    } else if (second != -1) {
+                        opVal1 = typeCheck(operand1);
+                        opVal2 = cols[second].getDataType();
+                        rtval = addType(opVal1, opVal2, operator, newCol, first, second, l);
+                    }
+                }
+
+                colArr[j] = new Column(tablName, rtval, newCol);
+            }
         }
         return colArr;
+    }
+
+    public String addType(String op1, String op2, String operator,
+                          ArrayList<String> newCol, int first, int second, int l) {
+        if (op1.equals("string") && op2.equals("string")) {
+            newCol.add(calculate((String) cols[first].getItem(l), (String) cols[second].getItem(l)));
+            return "string";
+        } else if (op1.equals("float") && op2.equals("float")) {
+            newCol.add(calculate(Float.parseFloat((String) cols[first].getItem(l)),
+                    Float.parseFloat((String) cols[second].getItem(l)), operator));
+            return "float";
+        } else if (op1.equals("int") && op2.equals("int")) {
+            newCol.add(calculate(Integer.parseInt((String) cols[first].getItem(l)),
+                    Integer.parseInt((String) cols[second].getItem(l)), operator));
+            return "int";
+        } else {
+            newCol.add(calculate(Float.parseFloat((String) cols[first].getItem(l)),
+                    Float.parseFloat((String) cols[second].getItem(l)), operator));
+            return "float";
+        }
+    }
+
+    public String calculate(float val1, float val2, String op) {
+        float convert = (float) 0.0;
+        if (op.equals("+")) {
+            convert = val1 + val2;
+        } else if (op.equals("-")) {
+            convert = val1 - val2;
+        } else if (op.equals("*")) {
+            convert = val1 * val2;
+        } else if (op.equals("/")) {
+            convert = val1 / val2;
+        }
+        return String.valueOf(convert);
+    }
+
+    public String calculate(String val1, String val2) {
+        return formatString(val1, val2);
+    }
+
+    public String formatString(String val1, String val2) {
+        Pattern p = Pattern.compile("([^']\\s*\\S*(\\s*\\S*)+[^'])");
+        Matcher m1 = p.matcher(val1);
+        Matcher m2 = p.matcher(val2);
+        String v1 = "";
+        String v2 = "";
+        if (m2.matches() && m1.matches()) {
+            v1 = m1.group(1);
+            v2 = m2.group(1);
+        }
+        return "'" + v1 + v2 + "'";
+    }
+
+    public String calculate(int val1, int val2, String op) {
+        int convert = 0;
+        if (op.equals("+")) {
+            convert = val1 + val2;
+        } else if (op.equals("-")) {
+            convert = val1 - val2;
+        } else if (op.equals("*")) {
+            convert = val1 * val2;
+        } else if (op.equals("/")) {
+            convert = val1 / val2;
+        }
+        return String.valueOf(convert);
     }
 
     public String selectString(Column[] col) {
@@ -232,4 +337,19 @@ public class Table {
         }
         return colNames;
     }
+
+    public static String typeCheck(String matcher) {
+        if (matcher.matches("[-+]?\\d+")) {
+            return "int";
+        } else if (matcher.matches("[-+]?\\d+\\.")
+                | matcher.matches("[-+]?\\.\\d+")
+                | matcher.matches("[-+]?\\d+\\.\\d+")) {
+            return "float";
+        } else if (matcher.matches("\'\\s*\\S*(\\s*\\S*)+\'")) {
+            return "string";
+        } else {
+            return "";
+        }
+    }
+
 }

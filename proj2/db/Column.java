@@ -38,7 +38,7 @@ public class Column<T> {
     }
 
     public void setData(ArrayList<T> d) {
-        data = d;
+        data = (ArrayList<T>) d.clone();
         size = d.size();
     }
 
