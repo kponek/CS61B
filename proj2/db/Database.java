@@ -98,6 +98,11 @@ public class Database {
             colNames[i] = line[0];
             colTypes[i] = line[1];
         }
+        for (String colT : colTypes) {
+            if (!colT.equals("int") && !colT.equals("float") && !colT.equals("string")) {
+                return "ERROR: Incorrect type of data.";
+            }
+        }
         return Handler.createTable(name, colTypes, colNames);
     }
 
@@ -125,7 +130,7 @@ public class Database {
         if (!m.matches()) {
             return "ERROR: Malformed insert: " + expr + "\n";
         }
-        Pattern p = Pattern.compile("\\s+|,");
+        Pattern p = Pattern.compile(",");
         String[] literals = p.split(m.group(2));
         return Handler.insertInto(m.group(1), literals);
     }
@@ -136,35 +141,23 @@ public class Database {
     private static String select(String expr) {
         Matcher m = SELECT_CLS.matcher(expr);
         if (!m.matches()) {
-            return "Error: Malformed select: " + expr + "\n";
+            return "ERROR: Malformed select: " + expr + "\n";
         }
         Pattern p1 = Pattern.compile("\\s+|,");
         Pattern p2 = Pattern.compile(AND);
         String[] exprs = p1.split(m.group(1));
         String[] tableNames = p1.split(m.group(2));
-        String[] conds = p2.split(m.group(3));
-        if (conds == null) {
+        String conditions = m.group(3);
+        if (conditions == null) {
             return Handler.selectTable(tableNames, exprs);
-        } else {
-            return Handler.selectTable(tableNames, exprs, conds);
         }
+        String[] conds = p2.split(conditions);
+        return Handler.selectTable(tableNames, exprs, conds);
     }
-
     public static void main(String[] args) {
-        //insertInto, createTable, store, load, dropTables
         Database db = new Database();
-        /*String[] colTypes = {"int","int"};
-        String[] colNames = {"x","y"};
-        String[] data1 = {"4","5"};
-        String[] data2 = {"6","7"};
-        Handler.createTable("T1",colTypes,colNames);
-        Handler.insertInto("T1",data1);
-        Handler.insertInto("T1",data2);
-        System.out.println(Handler.printTable("T1"));*/
-        Handler.load("T1");
-        System.out.println("Number of tables in database: " + tables.size());
-        System.out.println(Handler.printTable("T1"));
-        Handler.dropTable("T1");
-        System.out.println("Number of tables in database: " + tables.size());
+        Handler.load("T7");
+        Handler.load("T8");
+        System.out.println(Handler.join(tables.get(0),tables.get(1)).toString());
     }
 }

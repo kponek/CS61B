@@ -74,5 +74,8 @@ public class Column<T> {
         return columnName + data.toString();
     }
 
+    public void removeRow(int index) {
+        data.remove(index);
+        size--;
+    }
 }
-
