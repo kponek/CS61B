@@ -1,3 +1,12 @@
-x int,y int,z int
-2,5,4
-8,3,9
+TeamName string,Season int,Wins int,Losses int
+'Golden Bears', 2016,5,7
+'Golden Bears',2015,8,5
+'Golden Bears',2014,5,7
+'Steelers',2015,10,6
+'Steelers',2014,11,5
+'Steelers',2013,8,8
+'Mets',2015,90,72
+'Mets',2014,79,83
+'Mets',2013,74,88
+'Patriots',2015,12,5
+'Patriots',2014,7,9

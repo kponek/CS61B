@@ -180,10 +180,11 @@ public class Handler {
     }
 
     private static Table conditions(Table t, String[] cond) {
-        Pattern p3 = Pattern.compile("([']?\\s*\\w+\\s*[']?)"
-                + "(\\s*[><!=]+\\s*)([']?\\s*\\w+\\s*[']?)");
-        TreeSet<Integer> removedRows = new TreeSet<>();
+        Pattern p3 = Pattern.compile("([']?\\w+[']?)\\s*"
+                + "([><!=]+)\\s*([']?\\s*\\w+\\s*[']?)");
+        //TreeSet<Integer> removedRows = new TreeSet<>();
         for (int i = 0; i < cond.length; i++) {
+            TreeSet<Integer> removedRows = new TreeSet<>();
             Matcher m;
             (m = p3.matcher(cond[i])).matches();
             String first = m.group(1);
@@ -195,12 +196,14 @@ public class Handler {
                     for (int k = t.getCols()[0].getSize() - 1; k >= 0; k--) {
                         //comparison with string
                         if (t.getCols()[j].getDataType().equals("string")) {
+                            //y > x
                             if (t.getColNames().contains(second)) {
                                 if (!operator(op, (String) t.getCols()[j].getItem(k),
                                         (String) t.getCols()[t.getColNames().indexOf(second)].getItem(k)) || removedRows.contains(k)) {
                                     t.getCols()[j].removeRow(k);
                                     removedRows.add(k);
                                 }
+                                //y > 'mets'
                             } else {
                                 if (!operator(op, (String) t.getCols()[j].getItem(k), second) || removedRows.contains(k)) {
                                     t.getCols()[j].removeRow(k);
@@ -210,9 +213,18 @@ public class Handler {
                         }
                         //comparison with float
                         else {
-                            if (!operator(op, (float) t.getCols()[j].getItem(k), Float.valueOf(second)) || removedRows.contains(k)) {
-                                t.getCols()[j].removeRow(k);
-                                removedRows.add(k);
+                            float test1 = Float.valueOf((String) t.getCols()[j].getItem(k));
+                            float test2 = Float.valueOf((String) t.getCols()[t.getColNames().indexOf(second)].getItem(k));
+                            if (t.getColNames().contains(second)) {
+                                if (!operator(op, Float.valueOf((String) t.getCols()[j].getItem(k)), Float.valueOf((String) t.getCols()[t.getColNames().indexOf(second)].getItem(k))) || removedRows.contains(k)) {
+                                    t.getCols()[j].removeRow(k);
+                                    removedRows.add(k);
+                                }
+                            } else {
+                                if (!operator(op, Float.valueOf((String) t.getCols()[j].getItem(k)), Float.valueOf(second)) || removedRows.contains(k)) {
+                                    t.getCols()[j].removeRow(k);
+                                    removedRows.add(k);
+                                }
                             }
                         }
                     }
@@ -221,7 +233,7 @@ public class Handler {
             //remove rest of columns that were removed in filter above
             for (int j = 0; j < t.getRowSize(); j++) {
                 if (!first.equals(t.getCols()[j].getColumnName())) {
-                    for (int k = t.getCols()[0].getSize() - 1; k >= 0; k--) {
+                    for (int k = t.getCols()[j].getSize() - 1; k >= 0; k--) {
                         if (removedRows.contains(k)) {
                             t.getCols()[j].removeRow(k);
                         }
