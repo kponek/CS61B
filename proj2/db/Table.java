@@ -115,7 +115,7 @@ public class Table {
             }
             String[] digits = m.group(3).split("\\s*");
             String period = m.group(2);
-            rts += sign + period;
+            rts += sign + "0" + period;
             if (digits.length > 2) {
                 for (int i = 0; i < 3; i++) {
                     rts += digits[i];
@@ -139,7 +139,7 @@ public class Table {
             String[] predigits = m.group(2).split("\\s*");
             rts += sign;
             int i = 0;
-            for (int k = 0; k < predigits.length; k++) {
+            for (int k = 0; k < predigits.length - 1; k++) {
                 if (predigits[i].equals("0")) {
                     i++;
                 } else {

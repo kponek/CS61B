@@ -203,6 +203,7 @@ public class Database {
         Database db = new Database();
         Handler.load("T3", db);
         Handler.load("T6", db);
-        System.out.println(Handler.cartesian(db.getTables().get(0), db.getTables().get(1)).toString());
+        System.out.println(Handler.cartesian(db.getTables().get(0),
+        db.getTables().get(1)).toString());
     }*/
 }

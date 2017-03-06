@@ -169,14 +169,14 @@ public class Handler {
         for (String s : expr) {
             if (s.equals("*")) {
                 return joined.toString();
-            }
-            for (int i = 0; i < joined.getRowSize(); i++) {
-                if (s.equals(joined.getCols()[i].getColumnName())) {
-                    return joined.getCols()[i].toString();
-                    //this only works for the case of one column parameter
-                    //TODO: add more cases for multiple column select
+            } else if (expr.length == 1) {
+                for (int i = 0; i < joined.getRowSize(); i++) {
+                    if (s.equals(joined.getCols()[i].getColumnName())) {
+                        return joined.getCols()[i].toString();
+                    }
                 }
             }
+            //TODO: add more cases for multiple column select
         }
         return "";
     }
@@ -229,6 +229,7 @@ public class Handler {
         restTables[0] = joined;
         return joinAll(restTables);
     }
+
     public static Table join(Table a, Table b) {
         //self join
         if (a.equals(b)) {
