@@ -202,7 +202,10 @@ public class Handler {
                 }
             }
         }
-
+        //cartesian product if there are no matching columns
+        if (matchingColIndices.size() == 0) {
+            return cartesian(a,b);
+        }
         //find rows that match and store in matchingRowIndices
         for (int k = 0; k < matchingColIndices.size(); k++) {
             //iterate through each pair in map
@@ -288,7 +291,7 @@ public class Handler {
         //TODO: change the name to real name from select input
     }
 
-    public static Table cartesian(Table a, Table b) {
+    private static Table cartesian(Table a, Table b) {
         Column[] totCols = new Column[a.getCols().length + b.getCols().length];
         for (int m = 0; m < a.getRowSize(); m++) {
             totCols[m] = new Column(a.getCols()[m].getColumnName(), a.getCols()[m].getDataType());
