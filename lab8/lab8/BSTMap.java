@@ -16,6 +16,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             this.left = null;
             this.right = null;
         }
+
+        private void printInOrder() {
+            this.left.printInOrder();
+            System.out.print(this.key + " ");
+            this.right.printInOrder();
+        }
     }
 
     private Node root;
@@ -38,7 +44,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
     private V get(Node t, K key) {
-        if (key == null) {
+        if (t == null) {
             return null;
         } else if (t.key == key) {
             return t.value;
@@ -58,7 +64,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         if (t == null) {
             return 0;
         }
-        //return t.nodeSize;
         return 0;
     }
 
@@ -78,13 +83,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         } else {
             t.value = val;
         }
-        //t.nodeSize = size(t.left) + size(t.right) + 1;
         return t;
     }
 
     //prints out the Map in order of increasing Key
     public void printInOrder() {
-
+        root.printInOrder();
     }
 
     @Override
