@@ -276,13 +276,16 @@ public class Database {
         System.out.println("Mets".compareTo("Mets"));
         System.out.println("Patriots".compareTo("Mets"));*/
         Database db = new Database();
-        Handler.load("T3", db);
-        String[] tableName = {"T3"};
-        String[] exprs = {"TeamName", "Season", "Wins", "Losses"};
-        String[] conds = {"Wins != Losses", "Losses > 6", "Season < 2015"};
-        System.out.println(db.transact("select TeamName,Season,Wins,"
-                + "Losses from T3 where Wins != Losses and Losses > 6 and Season < 2015"));
-        System.out.println(Handler.selectTable(tableName, exprs, conds, db));
+        Handler.load("T7",db);
+        Handler.load("T8",db);
+        System.out.println(Handler.join(db.getTables().get(0),db.getTables().get(1)).toString());
+        //Handler.load("T3", db);
+        //String[] tableName = {"T3"};
+        //String[] exprs = {"TeamName", "Season", "Wins", "Losses"};
+        //String[] conds = {"Wins != Losses", "Losses > 6", "Season < 2015"};
+        //System.out.println(db.transact("select TeamName,Season,Wins,"
+        //        + "Losses from T3 where Wins != Losses and Losses > 6 and Season < 2015"));
+        //System.out.println(Handler.selectTable(tableName, exprs, conds, db));
         //String[] tableName, String[] expr, String[] cond, Database db
         //Handler.load("T6", db);
         //System.out.println(Handler.cartesian(db.getTables().get(0),

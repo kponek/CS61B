@@ -29,6 +29,16 @@ public class Parse {
                     SELECT_CLS.pattern()),
             INSERT_CLS = Pattern.compile("(\\S+)\\s+values\\s+(.+?" +
                     "\\s*(?:,\\s*.+?\\s*)*)");
+    private static final Pattern CREATE_NEW  = Pattern.compile("(\\S+)\\s+\\(\\s*(\\S+\\s+\\S+\\s*" +
+                                               "(?:,\\s*\\S+\\s+\\S+\\s*)*)\\)"),
+                                 SELECT_CLS  = Pattern.compile("([^,]+?(?:,[^,]+?)*)\\s+from\\s+" +
+                                               "(\\S+\\s*(?:,\\s*\\S+\\s*)*)(?:\\s+where\\s+" +
+                                               "([\\w\\s+\\-*/'<>=!.]+?(?:\\s+and\\s+" +
+                                               "[\\w\\s+\\-*/'<>=!.]+?)*))?"),
+                                 CREATE_SEL  = Pattern.compile("(\\S+)\\s+as select\\s+" +
+                                                   SELECT_CLS.pattern()),
+                                 INSERT_CLS  = Pattern.compile("(\\S+)\\s+values\\s+(.+?" +
+                                               "\\s*(?:,\\s*.+?\\s*)*)");
 
     public static void main(String[] args) {
         if (args.length != 1) {
