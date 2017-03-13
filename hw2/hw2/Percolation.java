@@ -18,7 +18,6 @@ public class Percolation {
         }
         grid = new boolean[n][n];
         connections = new WeightedQuickUnionUF(n * n + 2);
-        int bottoms = n * (n - 1);
         virtualTop = n * n;
         virtualBottom = n * n + 1;
         //top connected to -1
@@ -46,17 +45,17 @@ public class Percolation {
             if (row == grid.length - 1) {
                 connections.union(virtualBottom, num);
             }
-            if (num > grid.length && isOpen(num - grid.length)) {
+            if (row > 0 && isOpen(num - grid.length)) {
                 connections.union(num - grid.length, num);
             }
-            if (num < grid.length * (grid.length - 1)
+            if (row < (grid.length - 1)
                     && isOpen(num + grid.length)) {
                 connections.union(num + grid.length, num);
             }
-            if (num % grid.length != 0 && isOpen(num - 1)) {
+            if (col != 0 && isOpen(num - 1)) {
                 connections.union(num - 1, num);
             }
-            if (num % grid.length != grid.length - 1 && isOpen(num + 1)) {
+            if ((col != grid.length - 1) && isOpen(num + 1)) {
                 connections.union(num + 1, num);
             }
         }
@@ -94,20 +93,23 @@ public class Percolation {
     }
 
     private int numberToCol(int n) {
+        return n % grid.length;
+    }
+
+    private int numberToRow(int n) {
         int c = 0;
-        while (n > grid.length) {
+        while (n >= grid.length) {
             c++;
             n = n - grid.length;
         }
         return c;
     }
 
-    private int numberToRow(int n) {
-        return n % grid.length;
-    }
-
     public static void main(String[] args) {
-        boolean[][] grid = new boolean[4][4];
+        Percolation grid = new Percolation(3);
+        grid.open(0, 0);
+        grid.open(1, 1);
+
     }
 
 }                       
