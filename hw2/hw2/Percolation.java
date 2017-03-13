@@ -22,13 +22,13 @@ public class Percolation {
         virtualTop = n * n;
         virtualBottom = n * n + 1;
         //top connected to -1
-        for (int i = 0; i < n; i++) {
+       /* for (int i = 0; i < n; i++) {
             connections.union(virtualTop, i);
         }
         //bottom connected to -2
         for (int j = bottoms; j < (n * n); j++) {
             connections.union(virtualBottom, j);
-        }
+        }*/
     }
 
     public Percolation(boolean[][] gr) {
@@ -41,6 +41,12 @@ public class Percolation {
             grid[row][col] = true;
             int num = gridNumber(row, col);
             HashSet<Integer> neighbors = new HashSet<>();
+            if (row == 0) {
+                connections.union(virtualTop, num);
+            }
+            if (row == grid.length - 1) {
+                connections.union(virtualBottom, num);
+            }
             if (num > grid.length) {
                 neighbors.add(num - grid.length);
             }
