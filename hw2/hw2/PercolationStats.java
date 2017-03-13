@@ -1,6 +1,7 @@
 package hw2;
 
-import edu.princeton.cs.introcs.*;
+import edu.princeton.cs.introcs.StdRandom;
+import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
     private Percolation grid;

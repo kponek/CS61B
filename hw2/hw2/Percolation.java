@@ -2,26 +2,33 @@ package hw2;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-import java.util.*;
+import java.util.HashSet;
 
 public class Percolation {
 
     private boolean[][] grid;
     private WeightedQuickUnionUF connections;
     private int open;
+    private int virtualTop;
+    private int virtualBottom;
 
     public Percolation(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("ERROR: n is less than or equal to 1");
+        }
         grid = new boolean[n][n];
-        connections = new WeightedQuickUnionUF(gridNumber(n, n) + 2);
+        connections = new WeightedQuickUnionUF(n * n + 1);
         int tops = 0;
         int bottoms = n * (n - 1);
+        virtualTop = n * n;
+        virtualBottom = n * n + 1;
         //top connected to -1
         for (int i = 0; i < n; i++) {
-            connections.union(-1, i);
+            connections.union(virtualTop, i);
         }
         //bottom connected to -2
         for (int j = bottoms; j < (n * n); j++) {
-            connections.union(-2, j);
+            connections.union(virtualBottom, j);
         }
     }
 
@@ -66,11 +73,11 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
         int num = gridNumber(row, col);
-        return (connections.connected(num, -1));
+        return (connections.connected(num, virtualTop));
     }
 
     private boolean isFull(int n) {
-        return connections.connected(n, -1);
+        return connections.connected(n, virtualTop);
     }
 
     public int numberOfOpenSites() {
@@ -78,7 +85,7 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        return connections.connected(-1, -2);
+        return connections.connected(virtualTop, virtualBottom);
     }
 
     //return the grid number based on row and column integer values
