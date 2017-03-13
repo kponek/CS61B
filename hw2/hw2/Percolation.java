@@ -47,22 +47,18 @@ public class Percolation {
             if (row == grid.length - 1) {
                 connections.union(virtualBottom, num);
             }
-            if (num > grid.length) {
-                neighbors.add(num - grid.length);
+            if (num > grid.length && isOpen(num - grid.length)) {
+                connections.union(num - grid.length, num);
             }
-            if (num < grid.length * grid.length) {
-                neighbors.add(num + grid.length);
+            if (num < grid.length * grid.length
+                    && isOpen(num + grid.length)) {
+                connections.union(num + grid.length, num);
             }
-            if (num % grid.length != 0) {
-                neighbors.add(num - 1);
+            if (num % grid.length != 0 && isOpen(num - 1)) {
+                connections.union(num - 1, num);
             }
-            if (num % grid.length != 4) {
-                neighbors.add(num + 1);
-            }
-            for (int i : neighbors) {
-                if (isOpen(i)) {
-                    connections.union(i, num);
-                }
+            if (num % grid.length != 4 && isOpen(num + 1)) {
+                connections.union(num + 1, num);
             }
         }
 
