@@ -2,7 +2,6 @@ package hw2;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-import java.util.HashSet;
 
 public class Percolation {
 
@@ -22,18 +21,6 @@ public class Percolation {
         full = new WeightedQuickUnionUF(n * n + 1);
         virtualTop = n * n;
         virtualBottom = n * n + 1;
-        //top connected to -1
-       /* for (int i = 0; i < n; i++) {
-            connections.union(virtualTop, i);
-        }
-        //bottom connected to -2
-        for (int j = bottoms; j < (n * n); j++) {
-            connections.union(virtualBottom, j);
-        }*/
-    }
-
-    public Percolation(boolean[][] gr) {
-        grid = gr;
     }
 
     public void open(int row, int col) {
