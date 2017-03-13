@@ -49,7 +49,7 @@ public class Percolation {
             if (num > grid.length && isOpen(num - grid.length)) {
                 connections.union(num - grid.length, num);
             }
-            if (num < grid.length * grid.length
+            if (num < grid.length * (grid.length - 1)
                     && isOpen(num + grid.length)) {
                 connections.union(num + grid.length, num);
             }
