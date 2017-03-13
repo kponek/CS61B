@@ -72,7 +72,7 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
         int num = gridNumber(row, col);
-        return (connections.connected(num, virtualTop));
+        return (connections.connected(num, virtualTop) && isOpen(row, col));
     }
 
     private boolean isFull(int n) {
