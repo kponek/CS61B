@@ -8,6 +8,7 @@ public class Percolation {
 
     private boolean[][] grid;
     private WeightedQuickUnionUF connections;
+    private WeightedQuickUnionUF full;
     private int open;
     private int virtualTop;
     private int virtualBottom;
@@ -18,6 +19,7 @@ public class Percolation {
         }
         grid = new boolean[n][n];
         connections = new WeightedQuickUnionUF(n * n + 2);
+        full = new WeightedQuickUnionUF(n * n + 1);
         virtualTop = n * n;
         virtualBottom = n * n + 1;
         //top connected to -1
@@ -40,22 +42,28 @@ public class Percolation {
             grid[row][col] = true;
             int num = gridNumber(row, col);
             if (row == 0) {
+                full.union(virtualTop, num);
                 connections.union(virtualTop, num);
             }
+            //don't union full here because this is the backwash fix
             if (row == grid.length - 1) {
                 connections.union(virtualBottom, num);
             }
             if (row > 0 && isOpen(num - grid.length)) {
+                full.union(num - grid.length, num);
                 connections.union(num - grid.length, num);
             }
             if (row < (grid.length - 1)
                     && isOpen(num + grid.length)) {
+                full.union(num + grid.length, num);
                 connections.union(num + grid.length, num);
             }
             if (col != 0 && isOpen(num - 1)) {
+                full.union(num - 1, num);
                 connections.union(num - 1, num);
             }
             if ((col != grid.length - 1) && isOpen(num + 1)) {
+                full.union(num + 1, num);
                 connections.union(num + 1, num);
             }
         }
@@ -72,11 +80,11 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
         int num = gridNumber(row, col);
-        return (connections.connected(num, virtualTop) && isOpen(row, col));
+        return (full.connected(num, virtualTop) && isOpen(row, col));
     }
 
     private boolean isFull(int n) {
-        return connections.connected(n, virtualTop);
+        return full.connected(n, virtualTop) && isOpen(numberToRow(n), numberToCol(n));
     }
 
     public int numberOfOpenSites() {

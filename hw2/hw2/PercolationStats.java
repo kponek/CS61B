@@ -12,10 +12,11 @@ public class PercolationStats {
         if (N <= 0 || T <= 0) {
             throw new IllegalArgumentException("ERROR: N or T less than 0");
         }
+        fractions = new double[T];
         for (int i = 0; i < T; i++) {
             grid = new Percolation(N);
             while (!grid.percolates()) {
-                grid.open(StdRandom.uniform(25), StdRandom.uniform(25));
+                grid.open(StdRandom.uniform(N), StdRandom.uniform(N));
             }
             fractions[i] = (double) grid.numberOfOpenSites() / (N * N);
         }
