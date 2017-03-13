@@ -36,11 +36,10 @@ public class Percolation {
     }
 
     public void open(int row, int col) {
-        if (!grid[row][col]) {
+        if (!isOpen(row, col)) {
             open++;
             grid[row][col] = true;
             int num = gridNumber(row, col);
-            HashSet<Integer> neighbors = new HashSet<>();
             if (row == 0) {
                 connections.union(virtualTop, num);
             }
@@ -57,7 +56,7 @@ public class Percolation {
             if (num % grid.length != 0 && isOpen(num - 1)) {
                 connections.union(num - 1, num);
             }
-            if (num % grid.length != 4 && isOpen(num + 1)) {
+            if (num % grid.length != grid.length - 1 && isOpen(num + 1)) {
                 connections.union(num + 1, num);
             }
         }
@@ -91,7 +90,7 @@ public class Percolation {
 
     //return the grid number based on row and column integer values
     private int gridNumber(int r, int c) {
-        return c * grid.length + r % grid.length;
+        return r * grid.length + c;
     }
 
     private int numberToCol(int n) {
