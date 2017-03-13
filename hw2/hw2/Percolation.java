@@ -17,8 +17,7 @@ public class Percolation {
             throw new IllegalArgumentException("ERROR: n is less than or equal to 1");
         }
         grid = new boolean[n][n];
-        connections = new WeightedQuickUnionUF(n * n + 1);
-        int tops = 0;
+        connections = new WeightedQuickUnionUF(n * n + 2);
         int bottoms = n * (n - 1);
         virtualTop = n * n;
         virtualBottom = n * n + 1;
@@ -37,7 +36,7 @@ public class Percolation {
     }
 
     public void open(int row, int col) {
-        if (grid[row][col] == false) {
+        if (!grid[row][col]) {
             open++;
             grid[row][col] = true;
             int num = gridNumber(row, col);
