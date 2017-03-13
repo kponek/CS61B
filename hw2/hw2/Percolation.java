@@ -12,7 +12,7 @@ public class Percolation {
 
     public Percolation(int n) {
         grid = new boolean[n][n];
-        connections = new WeightedQuickUnionUF(gridNumber(n, n));
+        connections = new WeightedQuickUnionUF(gridNumber(n, n) + 2);
         int tops = 0;
         int bottoms = n * (n - 1);
         //top connected to -1
@@ -83,7 +83,7 @@ public class Percolation {
 
     //return the grid number based on row and column integer values
     private int gridNumber(int r, int c) {
-        return c * grid[r].length + r % grid[r].length;
+        return c * grid.length + r % grid.length;
     }
 
     private int numberToCol(int n) {
