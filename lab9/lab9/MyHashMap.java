@@ -10,8 +10,8 @@ import java.util.Set;
  * Created by kevin on 3/16/2017.
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
-    private int n;//number of key-value pairs
-    private int m;//hash table size
+    private int n; //number of key-value pairs
+    private int m; //hash table size
     private double factor;
     private SequentialSearchST<K, V>[] map;
     private HashSet keys;
@@ -51,7 +51,10 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     }
 
     public void clear() {
-        map = null;
+        map = new SequentialSearchST[m];
+        for (int i = 0; i < m; i++) {
+            map[i] = new SequentialSearchST<K, V>();
+        }
         n = 0;
     }
 
