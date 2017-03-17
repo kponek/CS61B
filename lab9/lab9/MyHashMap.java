@@ -5,7 +5,6 @@ import edu.princeton.cs.algs4.SequentialSearchST;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.ArrayList;
 
 /**
  * Created by kevin on 3/16/2017.
@@ -52,10 +51,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     }
 
     public void clear() {
-        map = new SequentialSearchST[m];
-        for (int i = 0; i < m; i++) {
-            map[i] = new SequentialSearchST<K, V>();
-        }
+        map = null;
+        n = 0;
     }
 
     public boolean containsKey(K key) {
@@ -63,7 +60,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     }
 
     public V get(K key) {
-        if (key == null) throw new IllegalArgumentException();
+        if (key == null) {
+            throw new IllegalArgumentException();
+        }
         int i = hash(key);
         return map[i].get(key);
     }
