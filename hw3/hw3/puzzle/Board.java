@@ -94,7 +94,7 @@ public class Board implements WorldState {
     }
 
     public boolean equals(Object y) {
-        for (int i = 0; i < game.length; i++) {
+        /*for (int i = 0; i < game.length; i++) {
             for (int j = 0; j < game[i].length; j++) {
                 if (this.game[i][j] != ((Board) y).game[i][j]) {
                     return false;
@@ -102,6 +102,20 @@ public class Board implements WorldState {
             }
         }
         return true;
+    }*/
+        return this.hashCode() == y.hashCode();
+    }
+
+    public int hashCode() {
+        int nums = 2 * game.length;
+        int total = 0;
+        for (int i = 0; i < game.length; i++) {
+            for (int j = 0; j < game[i].length; j++) {
+                total += nums * game[i][j];
+                nums--;
+            }
+        }
+        return total;
     }
 
     /**
