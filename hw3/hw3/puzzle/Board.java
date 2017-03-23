@@ -57,7 +57,7 @@ public class Board implements WorldState {
     }
 
     public int hamming() {
-        int count = 0;
+        int count = -1;
         for (int i = 0; i < game.length; i++) {
             for (int j = 0; j < game[i].length; j++) {
                 if (game[i][j] != (1 + j + i * game.length)) {
