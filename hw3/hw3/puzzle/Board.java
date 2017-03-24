@@ -119,8 +119,7 @@ public class Board implements WorldState {
         int total = 0;
         for (int i = 0; i < game.length; i++) {
             for (int j = 0; j < game[i].length; j++) {
-                total += nums * game[i][j];
-                nums--;
+                total += Math.pow(11,nums) * game[i][j];
             }
         }
         return total;
