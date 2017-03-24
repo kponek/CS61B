@@ -23,7 +23,8 @@ public class Solver {
         //A*
         while (!sn.state.isGoal()) {
             for (WorldState w : sn.state.neighbors()) {
-                if (!solution.contains(w)) {
+                if (sn.prev != w) {
+                    //!solution.contains(w)
                     SearchNode neighbor = new SearchNode(w, numMoves + 1, sn);
                     pq.insert(neighbor);
                 }

@@ -94,9 +94,9 @@ public class Board implements WorldState {
         return manhattan();
     }
 
-    public boolean isGoal() {
+    /*public boolean isGoal() {
         return this.equals(isGoal());
-    }
+    }*/
 
     public boolean equals(Object y) {
         /*for (int i = 0; i < game.length; i++) {
