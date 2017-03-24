@@ -7,7 +7,12 @@ public class Board implements WorldState {
     private final int BLANK = 0;
 
     public Board(int[][] tiles) {
-        game = tiles;
+        game = new int[tiles.length][tiles[0].length];
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                game[i][j] = tiles[i][j];
+            }
+        }
     }
 
     public int tileAt(int i, int j) {
@@ -103,6 +108,9 @@ public class Board implements WorldState {
         }
         return true;
     }*/
+        if (y == null) {
+            return false;
+        }
         return this.hashCode() == y.hashCode();
     }
 
