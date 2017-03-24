@@ -115,11 +115,12 @@ public class Board implements WorldState {
     }
 
     public int hashCode() {
-        int nums = 2 * game.length;
+        int nums = 2 * game.length - 1;
         int total = 0;
         for (int i = 0; i < game.length; i++) {
             for (int j = 0; j < game[i].length; j++) {
-                total += Math.pow(11,nums) * game[i][j];
+                total += Math.pow(11, nums) * game[i][j];
+                nums--;
             }
         }
         return total;
