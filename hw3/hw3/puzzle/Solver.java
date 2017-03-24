@@ -13,24 +13,25 @@ public class Solver {
 
     public Solver(WorldState initial) {
         //initialize everything
-        MinPQ pq = new MinPQ();
+        MinPQ<SearchNode> pq = new MinPQ<>();
         numMoves = 0;
         SearchNode sn = new SearchNode(initial);
+        WorldState check = initial;
         //pq.insert(sn);
         solution = new ArrayList<>();
         solution.add(sn.state);
-
         //A*
-        while (!sn.state.isGoal()) {
-            for (WorldState w : sn.state.neighbors()) {
-                if (sn.prev != w) {
+        while (!check.isGoal()) {
+            for (WorldState w : check.neighbors()) {
+                SearchNode neighbor = new SearchNode(w, numMoves + 1, sn);
+                if (sn.prev != w && !solution.contains(w)) {
                     //!solution.contains(w)
-                    SearchNode neighbor = new SearchNode(w, numMoves + 1, sn);
                     pq.insert(neighbor);
                 }
             }
-            sn = (SearchNode) pq.delMin();
-            solution.add(sn.state);
+            sn = pq.delMin();
+            check = sn.state;
+            solution.add(check);
             numMoves++;
         }
     }
