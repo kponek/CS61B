@@ -16,15 +16,17 @@ public class Solver {
         MinPQ pq = new MinPQ();
         numMoves = 0;
         SearchNode sn = new SearchNode(initial);
-        pq.insert(sn);
+        //pq.insert(sn);
         solution = new ArrayList<>();
         solution.add(sn.state);
 
         //A*
         while (!sn.state.isGoal()) {
             for (WorldState w : sn.state.neighbors()) {
-                SearchNode neighbor = new SearchNode(w, numMoves + 1, sn);
-                pq.insert(neighbor);
+                if (!solution.contains(w)) {
+                    SearchNode neighbor = new SearchNode(w, numMoves + 1, sn);
+                    pq.insert(neighbor);
+                }
             }
             sn = (SearchNode) pq.delMin();
             solution.add(sn.state);

@@ -1,4 +1,5 @@
 package hw3.puzzle;
+
 import edu.princeton.cs.algs4.StdOut;
 
 public class AlphabetEasyPuzzleSolver {
