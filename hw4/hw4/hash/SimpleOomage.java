@@ -35,7 +35,7 @@ public class SimpleOomage implements Oomage {
         if (!USE_PERFECT_HASH) {
             return red + green + blue;
         } else {
-            return 256 * (red + green + blue);
+            return (int) Math.pow(256, 2) * red + 256 * green + blue;
         }
     }
 
