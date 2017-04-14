@@ -23,6 +23,7 @@ public class GraphDB {
     /**
      * Example constructor shows how to create and start an XML parser.
      * You do not need to modify this constructor, but you're welcome to do so.
+     *
      * @param dbPath Path to the XML file to be parsed.
      */
     public GraphDB(String dbPath) {
@@ -40,6 +41,7 @@ public class GraphDB {
 
     /**
      * Helper to process strings into their "cleaned" form, ignoring punctuation and capitalization.
+     *
      * @param s Input string.
      * @return Cleaned string.
      */
@@ -48,41 +50,53 @@ public class GraphDB {
     }
 
     /**
-     *  Remove nodes with no connections from the graph.
-     *  While this does not guarantee that any two nodes in the remaining graph are connected,
-     *  we can reasonably assume this since typically roads are connected.
+     * Remove nodes with no connections from the graph.
+     * While this does not guarantee that any two nodes in the remaining graph are connected,
+     * we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
         // TODO: Your code here.
     }
 
-    /** Returns an iterable of all vertex IDs in the graph. */
+    /**
+     * Returns an iterable of all vertex IDs in the graph.
+     */
     Iterable<Long> vertices() {
         //YOUR CODE HERE, this currently returns only an empty list.
         return new ArrayList<Long>();
     }
 
-    /** Returns ids of all vertices adjacent to v. */
+    /**
+     * Returns ids of all vertices adjacent to v.
+     */
     Iterable<Long> adjacent(long v) {
         return null;
     }
 
-    /** Returns the distance in units of longitude between vertices v and w. */
+    /**
+     * Returns the distance in units of longitude between vertices v and w.
+     */
     double distance(long v, long w) {
         return 0;
     }
 
-    /** Returns the vertex id closest to the given longitude and latitude. */
+    /**
+     * Returns the vertex id closest to the given longitude and latitude.
+     */
     long closest(double lon, double lat) {
         return 0;
     }
 
-    /** Longitude of vertex v. */
+    /**
+     * Longitude of vertex v.
+     */
     double lon(long v) {
         return 0;
     }
 
-    /** Latitude of vertex v. */
+    /**
+     * Latitude of vertex v.
+     */
     double lat(long v) {
         return 0;
     }
