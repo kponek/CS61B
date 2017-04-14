@@ -78,12 +78,12 @@ public class QuickSort {
         return catenate(catenate(less, equal), greater);
     }
 
-    public static void main(String[] args) {
+    /*  public static void main(String[] args) {
         Queue<String> students = new Queue<String>();
         students.enqueue("Alice");
         students.enqueue("Vanessa");
         students.enqueue("Ethan");
-        System.out.println(students);
-        System.out.println(QuickSort.quickSort(students));
-    }
+        //System.out.println(students);
+        //System.out.println(QuickSort.quickSort(students));
+    }*/
 }
