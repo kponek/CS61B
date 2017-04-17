@@ -72,6 +72,17 @@ public class Rasterer {
             System.out.print(x.root.getFilename() + " ");
         }*/
         int rows = numRows();
+        //to protect against Arithmetic Exception: divide by zero
+        if (rows == 0) {
+            results.put("render_grid", this.img + ".png");
+            results.put("raster_ul_lon", MapServer.ROOT_ULLON);
+            results.put("raster_ul_lat", MapServer.ROOT_ULLAT);
+            results.put("raster_lr_lon", MapServer.ROOT_LRLON);
+            results.put("raster_lr_lat", MapServer.ROOT_LRLAT);
+            results.put("depth", 0);
+            results.put("query_success", true);
+            return results;
+        }
         int cols = grid.size() / rows;
         QuadTree[][] map = new QuadTree[rows][cols];
         String[][] images = new String[rows][cols];
@@ -98,7 +109,7 @@ public class Rasterer {
         results.put("raster_ul_lat", map[0][0].root.getUllat());
         results.put("raster_lr_lon", map[rows - 1][cols - 1].root.getLrlong());
         results.put("raster_lr_lat", map[rows - 1][cols - 1].root.getLrlat());
-        results.put("depth", (map[0][0].root.getFilename() + "").length());
+        results.put("depth", (map[0][0].root.getFilename() + "").length() - 4);
         results.put("query_success", true);
         return results;
     }
