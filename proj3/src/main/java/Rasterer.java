@@ -58,7 +58,7 @@ public class Rasterer {
      */
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         //testQuadTree(tree);
-        System.out.println(params);
+        //System.out.println(params);
         Map<String, Object> results = new HashMap<>();
         /*double ullat = params.get("ullat");
         double ullon = params.get("ullon");
@@ -79,16 +79,19 @@ public class Rasterer {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 map[r][c] = grid.remove(grid.size() - 1);
-                System.out.println("(" + r + "," + c + "): " + map[r][c].root.getFilename());
+                //System.out.println("(" + r + "," + c + "): " + map[r][c].root.getFilename());
             }
         }
         for (int i = 0; i < rows; i++) {
-            String[] imgs = sortRow(map[i]);
+            Map<String, Object> arrs = sortRow(map[i]);
+            String[] imgs = (String[]) arrs.get("images");
+            QuadTree[] query = (QuadTree[]) arrs.get("query");
             /*for (int j = 0; j < imgs.length; j++) {
                 images[i][j] = imgs[j];
             }*/
-            System.out.println("sort row " + i + ": " + Arrays.toString(imgs));
+            //System.out.println("sort row " + i + ": " + Arrays.toString(imgs));
             System.arraycopy(imgs, 0, images[i], 0, imgs.length);
+            System.arraycopy(query, 0, map[i], 0, query.length);
         }
         results.put("render_grid", images);
         results.put("raster_ul_lon", map[0][0].root.getUllong());
@@ -176,24 +179,31 @@ public class Rasterer {
         return latRows.size();
     }
 
-    private String[] sortRow(QuadTree[] tree) {
+    private Map<String, Object> sortRow(QuadTree[] tree) {
         ArrayList<String> images = new ArrayList<>();
         ArrayList<Double> lonRows = new ArrayList<>();
+        ArrayList<QuadTree> newTree = new ArrayList<>();
+        Map<String, Object> ret = new HashMap<>();
         for (QuadTree child : tree) {
             lonRows.add(child.root.getUllong());
         }
         Collections.sort(lonRows);
         for (double d : lonRows) {
-            for (QuadTree q : tree) {
-                if (q.root.getUllong() == d) {
-                    images.add(q.root.getFilename() + ".png");
+            for (int i = 0; i < tree.length; i++) {
+                if (tree[i].root.getUllong() == d) {
+                    images.add(tree[i].root.getFilename() + ".png");
+                    newTree.add(tree[i]);
                 }
             }
         }
         String[] imageArr = new String[images.size()];
+        QuadTree[] treeArr = new QuadTree[images.size()];
         for (int i = 0; i < images.size(); i++) {
             imageArr[i] = images.get(i);
+            treeArr[i] = newTree.get(i);
         }
-        return imageArr;
+        ret.put("images", imageArr);
+        ret.put("query", treeArr);
+        return ret;
     }
 }
