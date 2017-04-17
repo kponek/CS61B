@@ -8,8 +8,8 @@ import java.util.ArrayList;
  */
 public class QuadTree {
     public class QuadNode implements Comparable<QuadNode> {
-        public double ullat, ullong, lrlat, lrlong;
-        public String filename;
+        private double ullat, ullong, lrlat, lrlong;
+        private String filename;
 
         public QuadNode(double latTop, double longTop, double latBot, double longBot, String name) {
             ullat = latTop;
@@ -17,6 +17,26 @@ public class QuadTree {
             lrlat = latBot;
             lrlong = longBot;
             filename = name;
+        }
+
+        public double getUllat() {
+            return ullat;
+        }
+
+        public double getUllong() {
+            return ullong;
+        }
+
+        public double getLrlat() {
+            return lrlat;
+        }
+
+        public double getLrlong() {
+            return lrlong;
+        }
+
+        public String getFilename() {
+            return filename;
         }
 
         @Override
@@ -29,27 +49,25 @@ public class QuadTree {
     }
 
     public QuadNode root;
-    public QuadTree nw;
-    public QuadTree ne;
-    public QuadTree sw;
-    public QuadTree se;
+    public QuadTree[] children;
 
     public QuadTree(double ullat, double ullong, double lrlat, double lrlong, String filename) {
         /*root = new QuadNode(MapServer.ROOT_ULLAT, MapServer.ROOT_ULLON,
                 MapServer.ROOT_LRLAT, MapServer.ROOT_LRLON, null, null);*/
         root = new QuadNode(ullat, ullong, lrlat, lrlong, filename);
-        if (root.filename.length() == 7) {
-            nw = null;
-            ne = null;
-            sw = null;
-            se = null;
+        children = new QuadTree[4];
+        if (root.filename.length() == 11) {//img/ + 7 levels
+            children[0] = null;
+            children[1] = null;
+            children[2] = null;
+            children[3] = null;
         } else {
             double x = (ullong + lrlong) / 2;
             double y = (ullat + lrlat) / 2;
-            nw = new QuadTree(ullong, ullat, x, y, root.filename + "1");
-            ne = new QuadTree(x, ullat, lrlong, y, root.filename + "2");
-            sw = new QuadTree(ullong, y, x, lrlat, root.filename + "3");
-            se = new QuadTree(x, y, lrlong, lrlat, root.filename + "4");
+            children[0] = new QuadTree(ullat, ullong, y, x, root.filename + "1");
+            children[1] = new QuadTree(ullat, x, y, lrlong, root.filename + "2");
+            children[2] = new QuadTree(y, ullong, lrlat, x, root.filename + "3");
+            children[3] = new QuadTree(y, x, lrlat, lrlong, root.filename + "4");
         }
     }
 
@@ -75,15 +93,26 @@ public class QuadTree {
                 && root.lrlong >= query_ullong && root.ullat <= query_ullat) {
             return true;
         }
+        //checks if image overlaps query
+        else if (root.ullong <= query_ullong && root.ullat >= query_ullat
+                && root.lrlong >= query_lrlong && root.lrlat <= query_lrlat) {
+            return true;
+        }
         return false;
+        //return root.ullong <= query_lrlong && root.lrlong >= query_ullong && root.ullat >= query_lrlat && root.lrlat <= query_ullat;
     }
 
     public boolean lonDPPsmallerThanOrIsLeaf(double queriesLonDPP) {
         //check if it is a leaf
-        if (nw == null && ne == null && sw == null && se == null) {
+        if (children[0] == null && children[1] == null && children[2] == null && children[3] == null) {
             return true;
         }
         //check if lonDPP is less than or equal to query lonDPP
-        return ((root.lrlong - root.ullong) / 256) <= queriesLonDPP;
+        return getLonDPP() <= queriesLonDPP;
     }
+
+    public double getLonDPP() {
+        return (root.lrlong - root.ullong) / 256;
+    }
+
 }
