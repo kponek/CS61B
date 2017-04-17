@@ -1,0 +1,1 @@
+My assignment was late because I had to move into another apartment yesterday. Also I fell behind on work for the project because I ran into some bugs with my code.  For me, the slowest part is understanding the project and getting in the groove for working on it.  Now that I am done with rasterer and the quadtree, I think that the rest of the project will be easier to complete.

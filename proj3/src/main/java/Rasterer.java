@@ -158,14 +158,14 @@ public class Rasterer {
         grid = newGrid;
         return latRows.size();*/
         ArrayList<QuadTree> newGrid = new ArrayList<>();
-        ArrayList<Double> lats = new ArrayList<>();
+        ArrayList<Double> latRows = new ArrayList<>();
         for (QuadTree q : grid) {
-            if (!lats.contains(q.root.getUllat())) {
-                lats.add(q.root.getUllat());
+            if (!latRows.contains(q.root.getUllat())) {
+                latRows.add(q.root.getUllat());
             }
         }
-        Collections.sort(lats);
-        for (double d : lats) {
+        Collections.sort(latRows);
+        for (double d : latRows) {
             for (QuadTree q : grid) {
                 if (q.root.getUllat() == d) {
                     newGrid.add(q);
@@ -173,7 +173,7 @@ public class Rasterer {
             }
         }
         grid = newGrid;
-        return lats.size();
+        return latRows.size();
     }
 
     private String[] sortRow(QuadTree[] tree) {
