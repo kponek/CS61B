@@ -73,7 +73,7 @@ public class QuadTree {
 
     public boolean intersectsTile(double query_ullat, double query_ullong,
                                   double query_lrlat, double query_lrlong) {
-        //checks if bottom right is inside query
+        /*//checks if bottom right is inside query
         if (root.lrlat <= query_ullat && root.lrlong >= query_ullong
                 && root.lrlat >= query_lrlat && root.lrlong <= query_lrlong) {
             return true;
@@ -98,13 +98,13 @@ public class QuadTree {
                 && root.lrlong >= query_lrlong && root.lrlat <= query_lrlat) {
             return true;
         }
-        return false;
-        //return root.ullong <= query_lrlong && root.lrlong >= query_ullong && root.ullat >= query_lrlat && root.lrlat <= query_ullat;
+        return false;*/
+        return root.ullong <= query_lrlong && root.lrlong >= query_ullong && root.ullat >= query_lrlat && root.lrlat <= query_ullat;
     }
 
     public boolean lonDPPsmallerThanOrIsLeaf(double queriesLonDPP) {
         //check if it is a leaf
-        if (children[0] == null && children[1] == null && children[2] == null && children[3] == null) {
+        if (root.getFilename().length() == 11) {
             return true;
         }
         //check if lonDPP is less than or equal to query lonDPP
