@@ -6,6 +6,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -26,6 +28,8 @@ public class GraphDB {
      *
      * @param dbPath Path to the XML file to be parsed.
      */
+    Map<Long, Point> nodes = new HashMap<>();
+
     public GraphDB(String dbPath) {
         try {
             File inputFile = new File(dbPath);
@@ -55,49 +59,86 @@ public class GraphDB {
      * we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        // TODO: Your code here.
+        for (long l : vertices()) {
+            int adjCount = 0;
+            for (long a : adjacent(l)) {
+                adjCount++;
+            }
+            if (adjCount == 0) {
+                removeNode(l);
+            }
+        }
     }
 
     /**
      * Returns an iterable of all vertex IDs in the graph.
      */
     Iterable<Long> vertices() {
-        //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        return nodes.keySet();
     }
 
     /**
      * Returns ids of all vertices adjacent to v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        return nodes.get(v).getAdjacentIds();
     }
 
     /**
      * Returns the distance in units of longitude between vertices v and w.
      */
     double distance(long v, long w) {
-        return 0;
+        double lonDiff = lon(v) - lon(w);
+        double latDiff = lat(v) - lat(w);
+        return Math.sqrt(lonDiff * lonDiff + latDiff * latDiff);
     }
 
     /**
      * Returns the vertex id closest to the given longitude and latitude.
      */
     long closest(double lon, double lat) {
-        return 0;
+        double minDist = Double.MAX_VALUE;
+        Point minPoint = null;
+        for (Point p : nodes.values()) {
+            double lonDiff = p.getLon() - lon;
+            double latDiff = p.getLat() - lat;
+            double dist = Math.sqrt(lonDiff * lonDiff + latDiff * latDiff);
+            if (dist < minDist) {
+                minDist = dist;
+                minPoint = p;
+            }
+        }
+        return minPoint.getId();
     }
 
     /**
      * Longitude of vertex v.
      */
     double lon(long v) {
-        return 0;
+        return nodes.get(v).getLon();
     }
 
     /**
      * Latitude of vertex v.
      */
     double lat(long v) {
-        return 0;
+        return nodes.get(v).getLat();
+    }
+
+    public void addNode(long id, double lat, double lon) {
+        Point n = new Point(id, lat, lon);
+        nodes.put(id, n);
+    }
+
+    public void addEdge(Point a, Point b) {
+        //implement
+    }
+
+    public void addWay(ArrayList<Long> ids) {
+        //implement
+    }
+
+    public void removeNode(long id) {
+        nodes.remove(id);
     }
 }
