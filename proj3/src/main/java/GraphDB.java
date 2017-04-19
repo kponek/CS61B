@@ -7,6 +7,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -29,6 +30,8 @@ public class GraphDB {
      * @param dbPath Path to the XML file to be parsed.
      */
     Map<Long, Point> nodes = new HashMap<>();
+    //private Map<Point, HashSet<Edge>> edges;
+    private HashMap<String, Point> nodeNames = new HashMap<>();
 
     public GraphDB(String dbPath) {
         try {
@@ -130,6 +133,10 @@ public class GraphDB {
         nodes.put(id, n);
     }
 
+    public void addNodeName(Point n, String name) {
+        nodeNames.put(name, n);
+    }
+
     public void addEdge(Point a, Point b) {
         //implement
     }
@@ -140,5 +147,9 @@ public class GraphDB {
 
     public void removeNode(long id) {
         nodes.remove(id);
+    }
+
+    public Point getNode(long id) {
+        return nodes.get(id);
     }
 }

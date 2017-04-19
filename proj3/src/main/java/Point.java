@@ -39,15 +39,19 @@ public class Point {
     public Set<Long> getAdjacentIds() {
         return adjacentIds;
     }
+
     public String getName() {
         return name;
     }
+
     public void addEdge(Point a) {
+        Edge connection = new Edge(a, this);
         adjacentPoints.add(a);
         a.adjacentPoints.add(this);
         adjacentIds.add(a.getId());
         a.adjacentIds.add(this.id);
     }
+
     public void setName(String n) {
         name = n;
     }

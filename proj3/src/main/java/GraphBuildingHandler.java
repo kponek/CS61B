@@ -36,8 +36,13 @@ public class GraphBuildingHandler extends DefaultHandler {
                     "secondary_link", "tertiary_link"));
     private String activeState = "";
     private final GraphDB g;
-    private ArrayList<Long> wayRefs;
-    private boolean ended;
+    private HashMap<Point, HashSet<Edge>> edges = new HashMap<>();
+    private Map<Long, Point> nodes = new HashMap<>();
+    private ArrayList<Long> wayRefs = new ArrayList<>();
+    private boolean validEdge = false;
+    ArrayList<Point> wayEdge = new ArrayList<>();
+    String wayName;
+    Point node;
 
     public GraphBuildingHandler(GraphDB g) {
         this.g = g;
@@ -61,7 +66,7 @@ public class GraphBuildingHandler extends DefaultHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes)
             throws SAXException {
-        g.nodes = new TreeMap<>();
+        //g.nodes = new TreeMap<>();
         /* Some example code on how you might begin to parse XML files. */
         if (qName.equals("node")) {
             /* We encountered a new <node...> tag. */
@@ -72,16 +77,16 @@ public class GraphBuildingHandler extends DefaultHandler {
             long id = Long.parseLong(attributes.getValue("id"));
             double lon = Double.parseDouble(attributes.getValue("lon"));
             double lat = Double.parseDouble(attributes.getValue("lat"));
-            Point node = new Point(id, lat, lon);
+            node = new Point(id, lat, lon);
             /* TODO Use the above information to save a "node" to somewhere. */
-            g.nodes.put(id, node);
+            nodes.put(id, node);
             //GraphDB data = new GraphDB();
             /* Hint: A graph-like structure would be nice. KEVIN YOU ARE SO BEAUTIFUL I LOVE YOUUUUUUUUUUUU */
 
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
             activeState = "way";
-            wayRefs = new ArrayList<>();
+            wayEdge = new ArrayList<>();
 //            System.out.println("Beginning a way...");
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
@@ -93,7 +98,7 @@ public class GraphBuildingHandler extends DefaultHandler {
             makes this way invalid. Instead, think of keeping a list of possible connections and
             remember whether this way is valid or not. */
             long id = Long.parseLong(attributes.getValue("ref"));
-            wayRefs.add(id);
+            wayEdge.add(nodes.get(id));
         } else if (activeState.equals("way") && qName.equals("tag")) {
             /* While looking at a way, we found a <tag...> tag. */
             String k = attributes.getValue("k");
@@ -106,12 +111,16 @@ public class GraphBuildingHandler extends DefaultHandler {
                 /* TODO Figure out whether this way and its connections are valid. */
                 /* Hint: Setting a "flag" is good enough! */
                 if (ALLOWED_HIGHWAY_TYPES.contains(v)) {
-                    for (int i = 1; i < wayRefs.size(); i++) {
+                    validEdge = true;
+                    /*for (int i = 1; i < wayRefs.size(); i++) {
                         g.nodes.get(wayRefs.get(i)).addEdge(g.nodes.get(wayRefs.get(i + 1)));
-                    }
+                    }*/
+                } else {
+                    validEdge = false;
                 }
             } else if (k.equals("name")) {
                 //System.out.println("Way Name: " + v);
+                wayName = attributes.getValue("name");
             }
 //            System.out.println("Tag with k=" + k + ", v=" + v + ".");
         } else if (activeState.equals("node") && qName.equals("tag") && attributes.getValue("k")
@@ -122,7 +131,7 @@ public class GraphBuildingHandler extends DefaultHandler {
             node this tag belongs to. Remember XML is parsed top-to-bottom, so probably it's the
             last node that you looked at (check the first if-case). */
 //            System.out.println("Node's name: " + attributes.getValue("v"));
-
+            node.setName(attributes.getValue("name"));
         }
     }
 
