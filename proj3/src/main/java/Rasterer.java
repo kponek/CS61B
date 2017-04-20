@@ -57,15 +57,9 @@ public class Rasterer {
      * @see #REQUIRED_RASTER_REQUEST_PARAMS
      */
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
-        testQuadTree(tree);
+        //testQuadTree(tree);
         //System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        /*double ullat = params.get("ullat");
-        double ullon = params.get("ullon");
-        double lrlat = params.get("lrlat");
-        double lrlon = params.get("lrlon");
-        double width = params.get("w");
-        double queryLonDPP = (lrlon - ullon) / width;*/
         matches(tree, params);
         /*System.out.println(grid.size());
         for (QuadTree x : grid) {
@@ -122,9 +116,9 @@ public class Rasterer {
     }
 
     public void testQuadTree(QuadTree t) {
-        if (t.root.getUllong() == -122.2998046875) {
+        //if (t.root.getUllong() == -122.2998046875) {
             System.out.println(t.root.getFilename());
-        }
+        //}
         for (QuadTree c : t.children) {
             if (c != null)
                 testQuadTree(c);
@@ -163,28 +157,6 @@ public class Rasterer {
     }
 
     private int numRows() {
-        /*ArrayList<QuadTree> g = (ArrayList<QuadTree>) grid.clone();
-        ArrayList<QuadTree> newGrid = new ArrayList<>();
-        ArrayList<Double> latRows = new ArrayList<>();
-        while (g.size() > 0) {
-            double minLat = g.get(0).root.getUllat();
-            if (!latRows.contains(minLat)) {
-                latRows.add(minLat);
-            }
-            int index = 0;
-            for (int i = 0; i < g.size(); i++) {
-                if (g.get(i).root.getUllat() < minLat) {
-                    index = 0;
-                    minLat = g.get(i).root.getUllat();
-                    if (!latRows.contains(minLat)) {
-                        latRows.add(minLat);
-                    }
-                }
-            }
-            newGrid.add(g.remove(index));
-        }
-        grid = newGrid;
-        return latRows.size();*/
         ArrayList<QuadTree> newGrid = new ArrayList<>();
         ArrayList<Double> latRows = new ArrayList<>();
         for (QuadTree q : grid) {

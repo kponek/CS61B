@@ -8,11 +8,26 @@ public class Edge {
     private double length;
 
     public Edge(Point a, Point b) {
+        /*if (a.getId() == 3347105714L || b.getId() == 3347105714L) {
+            System.out.println("poop");
+        }*/
         start = a;
         end = b;
         a.addEdge(b);
         double lonDiff = a.getLon() - b.getLon();
         double latDiff = a.getLat() - b.getLat();
         length = Math.sqrt(lonDiff * lonDiff + latDiff * latDiff);
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public Point getEnd() {
+        return end;
+    }
+
+    public Point getStart() {
+        return start;
     }
 }

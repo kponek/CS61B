@@ -8,6 +8,7 @@ public class AGRastererTest extends AGMapTest {
      * and ensuring that the resulting map is correct. All of the test data is stored in a
      * TestParameters object that is loaded by the AGMapTest constructor. Note that this test file
      * extends AGMapTest, where most of the interesting stuff happens.
+     *
      * @throws Exception
      */
     @Test

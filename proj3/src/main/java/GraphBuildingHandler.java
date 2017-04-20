@@ -149,7 +149,7 @@ public class GraphBuildingHandler extends DefaultHandler {
      */
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (qName.equals("way")) {
+        if (qName.equals("way") && validEdge && wayEdge != null) {
             /* We are done looking at a way. (We finished looking at the nodes, speeds, etc...)*/
             /* Hint1: If you have stored the possible connections for this way, here's your
             chance to actually connect the nodes together if the way is valid. */
@@ -161,6 +161,9 @@ public class GraphBuildingHandler extends DefaultHandler {
                 if (prevEdges == null) {
                     prevEdges = new HashSet<>();
                 }
+                /*if (first.getId() == 3347105714L && second.getId() == 3347105715L) {
+                    System.out.println("wut wut in da butt");
+                }*/
                 prevEdges.add(new Edge(first, second));
                 edges.put(first, prevEdges);
 

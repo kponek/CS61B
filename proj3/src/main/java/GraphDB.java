@@ -38,8 +38,8 @@ public class GraphDB {
             GraphBuildingHandler gbh = new GraphBuildingHandler(this);
             saxParser.parse(inputFile, gbh);
             //my code
-            //nodes = gbh.getNodes();
-            //edges = gbh.getEdges();
+            nodes = gbh.getNodes();
+            edges = gbh.getEdges();
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,7 @@ public class GraphDB {
      * we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        Iterable<Long> v = vertices();
+        /*Iterable<Long> v = vertices();
         for (long l : v) {
             int adjCount = 0;
             for (long a : adjacent(l)) {
@@ -72,8 +72,8 @@ public class GraphDB {
                 //removeNode(l);
                 nodes.remove(l);
             }
-        }
-        /*Iterator v = vertices().iterator();
+        }*/
+        Iterator v = vertices().iterator();
         while (v.hasNext()) {
             Iterable<Long> adj = adjacent((Long) v.next());
             if (adj instanceof Collection && ((Collection<?>) adj).size() == 0) {
@@ -89,7 +89,7 @@ public class GraphDB {
                     v.remove();
                 }
             }
-        }*/
+        }
         /*for (long l : v) {
             int adjCount = 0;
             for (long a : adjacent(l)) {
