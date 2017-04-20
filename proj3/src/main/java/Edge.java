@@ -8,6 +8,8 @@ public class Edge {
     private double length;
 
     public Edge(Point a, Point b) {
+        start = a;
+        end = b;
         a.addEdge(b);
         double lonDiff = a.getLon() - b.getLon();
         double latDiff = a.getLat() - b.getLat();

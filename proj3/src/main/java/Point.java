@@ -45,7 +45,7 @@ public class Point {
     }
 
     public void addEdge(Point a) {
-        Edge connection = new Edge(a, this);
+        //Edge connection = new Edge(a, this);
         adjacentPoints.add(a);
         a.adjacentPoints.add(this);
         adjacentIds.add(a.getId());

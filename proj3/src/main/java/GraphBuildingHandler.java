@@ -154,8 +154,34 @@ public class GraphBuildingHandler extends DefaultHandler {
             /* Hint1: If you have stored the possible connections for this way, here's your
             chance to actually connect the nodes together if the way is valid. */
 //            System.out.println("Finishing a way...");
-            g.addWay(wayRefs);
+            for (int i = 0; i < wayEdge.size() - 1; i++) {
+                Point first = wayEdge.get(i);
+                Point second = wayEdge.get(i + 1);
+                HashSet<Edge> prevEdges = edges.get(first);
+                if (prevEdges == null) {
+                    prevEdges = new HashSet<>();
+                }
+                prevEdges.add(new Edge(first, second));
+                edges.put(first, prevEdges);
+
+                prevEdges = edges.get(second);
+                if (prevEdges == null) {
+                    prevEdges = new HashSet<>();
+                }
+                prevEdges.add(new Edge(second, first));
+                edges.put(second, prevEdges);
+            }
+            validEdge = false;
+            wayEdge = new ArrayList<>();
         }
+    }
+
+    public Map<Long, Point> getNodes() {
+        return nodes;
+    }
+
+    public HashMap<Point, HashSet<Edge>> getEdges() {
+        return edges;
     }
 
 }

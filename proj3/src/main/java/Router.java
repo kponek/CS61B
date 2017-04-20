@@ -1,4 +1,7 @@
 import java.util.LinkedList;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.PriorityQueue;
 
 /**
  * This class provides a shortestPath method for finding routes between two points
@@ -13,7 +16,15 @@ public class Router {
      * Return a LinkedList of <code>Long</code>s representing the shortest path from st to dest,
      * where the longs are node IDs.
      */
+    HashMap<Long, Point> vertices;
+    HashMap<Point, HashSet<Edge>> edges;
+    HashMap<Long, Double> distTo;
+    HashMap<Long, Long> prev;
+    Point start;
+    Point target;
+
     public static LinkedList<Long> shortestPath(GraphDB g, double stlon, double stlat, double destlon, double destlat) {
         return new LinkedList<Long>();
     }
+
 }

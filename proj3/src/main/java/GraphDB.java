@@ -5,10 +5,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -30,7 +27,7 @@ public class GraphDB {
      * @param dbPath Path to the XML file to be parsed.
      */
     Map<Long, Point> nodes = new HashMap<>();
-    //private Map<Point, HashSet<Edge>> edges;
+    private Map<Point, HashSet<Edge>> edges;
     private HashMap<String, Point> nodeNames = new HashMap<>();
 
     public GraphDB(String dbPath) {
@@ -40,6 +37,9 @@ public class GraphDB {
             SAXParser saxParser = factory.newSAXParser();
             GraphBuildingHandler gbh = new GraphBuildingHandler(this);
             saxParser.parse(inputFile, gbh);
+            //my code
+            nodes = gbh.getNodes();
+            edges = gbh.getEdges();
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
@@ -62,15 +62,44 @@ public class GraphDB {
      * we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        for (long l : vertices()) {
+        /*Iterable<Long> v = vertices();
+        for (long l : v) {
             int adjCount = 0;
             for (long a : adjacent(l)) {
                 adjCount++;
             }
             if (adjCount == 0) {
-                removeNode(l);
+                //removeNode(l);
+                nodes.remove(l);
+            }
+        }*/
+        Iterator v = vertices().iterator();
+        while (v.hasNext()) {
+            Iterable<Long> adj = adjacent((Long) v.next());
+            if (adj instanceof Collection && ((Collection<?>) adj).size() == 0) {
+                v.remove();
+            } else {
+                int count = 0;
+                Iterator iterator = adj.iterator();
+                while (iterator.hasNext()) {
+                    iterator.next();
+                    count++;
+                }
+                if (count == 0) {
+                    v.remove();
+                }
             }
         }
+        /*for (long l : v) {
+            int adjCount = 0;
+            for (long a : adjacent(l)) {
+                adjCount++;
+            }
+            if (adjCount == 0) {
+                //removeNode(l);
+                nodes.remove(l);
+            }
+        }*/
     }
 
     /**
@@ -102,6 +131,9 @@ public class GraphDB {
     long closest(double lon, double lat) {
         double minDist = Double.MAX_VALUE;
         Point minPoint = null;
+        if (nodes == null) {
+            return 0;
+        }
         for (Point p : nodes.values()) {
             double lonDiff = p.getLon() - lon;
             double latDiff = p.getLat() - lat;
