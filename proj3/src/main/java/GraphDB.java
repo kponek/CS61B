@@ -38,8 +38,8 @@ public class GraphDB {
             GraphBuildingHandler gbh = new GraphBuildingHandler(this);
             saxParser.parse(inputFile, gbh);
             //my code
-            nodes = gbh.getNodes();
-            edges = gbh.getEdges();
+            //nodes = gbh.getNodes();
+            //edges = gbh.getEdges();
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
