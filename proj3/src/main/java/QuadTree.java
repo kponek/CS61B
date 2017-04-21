@@ -1,7 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Created by kevin on 4/13/2017.
@@ -11,7 +7,8 @@ public class QuadTree {
         private double ullat, ullong, lrlat, lrlong;
         private String filename;
 
-        public QuadNode(double latTop, double longTop, double latBot, double longBot, String name) {
+        public QuadNode(double latTop, double longTop,
+                        double latBot, double longBot, String name) {
             ullat = latTop;
             ullong = longTop;
             lrlat = latBot;
@@ -51,7 +48,8 @@ public class QuadTree {
     public QuadNode root;
     public QuadTree[] children;
 
-    public QuadTree(double ullat, double ullong, double lrlat, double lrlong, String filename) {
+    public QuadTree(double ullat, double ullong,
+                    double lrlat, double lrlong, String filename) {
         root = new QuadNode(ullat, ullong, lrlat, lrlong, filename);
         children = new QuadTree[4];
         if (root.filename.length() == 11) {//img/ + 7 levels
@@ -97,7 +95,8 @@ public class QuadTree {
             return true;
         }
         return false;*/
-        return root.ullong <= query_lrlong && root.lrlong >= query_ullong && root.ullat >= query_lrlat && root.lrlat <= query_ullat;
+        return root.ullong <= query_lrlong && root.lrlong >= query_ullong
+                && root.ullat >= query_lrlat && root.lrlat <= query_ullat;
     }
 
     public boolean lonDPPsmallerThanOrIsLeaf(double queriesLonDPP) {

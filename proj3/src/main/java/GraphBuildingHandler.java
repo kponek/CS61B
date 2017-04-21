@@ -30,7 +30,8 @@ public class GraphBuildingHandler extends DefaultHandler {
      * roads, but in practice we walk all over them with such impunity that we forget cars can
      * actually drive on them.
      */
-    private static final Set<String> ALLOWED_HIGHWAY_TYPES = new HashSet<>(Arrays.asList
+    private static final Set<String> ALLOWED_HIGHWAY_TYPES
+            = new HashSet<>(Arrays.asList
             ("motorway", "trunk", "primary", "secondary", "tertiary", "unclassified",
                     "residential", "living_street", "motorway_link", "trunk_link", "primary_link",
                     "secondary_link", "tertiary_link"));
@@ -63,7 +64,8 @@ public class GraphBuildingHandler extends DefaultHandler {
      * @see Attributes
      */
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes)
+    public void startElement(String uri, String localName,
+                             String qName, Attributes attributes)
             throws SAXException {
         //g.nodes = new TreeMap<>();
         /* Some example code on how you might begin to parse XML files. */

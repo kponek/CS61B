@@ -34,8 +34,10 @@ public class Finder {
             }
             for (Point p : nextVisit.getPoint().getAdjacentPoints()) {
                 PQPoint child = new PQPoint(p, target, 0.0);
-                double childDist = dist.get(nextVisit.getPoint().getId()) + euclidDist(p, nextVisit.getPoint());
-                if (!dist.containsKey(child.getPoint().getId()) || dist.get(child.getPoint().getId()) > childDist) {
+                double childDist = dist.get(nextVisit.getPoint().getId())
+                        + euclidDist(p, nextVisit.getPoint());
+                if (!dist.containsKey(child.getPoint().getId())
+                        || dist.get(child.getPoint().getId()) > childDist) {
                     PQPoint trueChild = new PQPoint(p, target, childDist);
                     dist.put(trueChild.getPoint().getId(), childDist);
                     prev.put(trueChild.getPoint(), nextVisit.getPoint());

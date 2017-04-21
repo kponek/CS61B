@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * This class provides all code necessary to take a query box and produce
@@ -18,7 +21,8 @@ public class Rasterer {
      * You may not actually need this for your class.
      */
     public Rasterer(String imgRoot) {
-        tree = new QuadTree(MapServer.ROOT_ULLAT, MapServer.ROOT_ULLON, MapServer.ROOT_LRLAT, MapServer.ROOT_LRLON, imgRoot);
+        tree = new QuadTree(MapServer.ROOT_ULLAT, MapServer.ROOT_ULLON,
+                MapServer.ROOT_LRLAT, MapServer.ROOT_LRLON, imgRoot);
         grid = new ArrayList<>();
         img = imgRoot;
     }
@@ -65,7 +69,7 @@ public class Rasterer {
         for (QuadTree x : grid) {
             System.out.print(x.root.getFilename() + " ");
         }*/
-        int rows = numRows();
+        int rows = numRows().size();
         //to protect against Arithmetic Exception: divide by zero
         if (rows == 0) {
             results.put("render_grid", this.img + ".png");
@@ -132,21 +136,18 @@ public class Rasterer {
             for (QuadTree c : qt.children) {
                 matches(c, params);
             }
-        }
-        //!p1
-        else if (!qt.intersectsTile(params.get("ullat"), params.get("ullon"), params.get("lrlat"), params.get("lrlon"))) {
+        } else if (!qt.intersectsTile(params.get("ullat"), params.get("ullon"),
+                params.get("lrlat"), params.get("lrlon"))) {
             return;
-        }
-        //p1 && p2
-        else if (qt.lonDPPsmallerThanOrIsLeaf((params.get("lrlon") - params.get("ullon")) / params.get("w")) || qt.root.getFilename().length() >= 11) {
+        } else if (qt.lonDPPsmallerThanOrIsLeaf((params.get("lrlon")
+                - params.get("ullon"))
+                / params.get("w")) || qt.root.getFilename().length() >= 11) {
             //System.out.println("query londpp: " + (params.get("lrlon") - params.get("ullon")) / params.get("w"));
             //System.out.println("tile londpp: " + qt.getLonDPP());
             //if (qt.intersectsTile(params.get("ullat"), params.get("ullon"), params.get("lrlat"), params.get("lrlon"))) {
             //System.out.println("londpp smaller and intersect");
             grid.add(qt);
-        }
-        //p1 && !p2
-        else {
+        } else {
             //System.out.println("uh");
             for (QuadTree c : qt.children) {
                 //if (c.intersectsTile(params.get("ullat"), params.get("ullon"), params.get("lrlat"), params.get("lrlon"))) {
@@ -156,7 +157,7 @@ public class Rasterer {
         }
     }
 
-    private int numRows() {
+    private ArrayList<Double> numRows() {
         ArrayList<Double> latRows = new ArrayList<>();
         ArrayList<QuadTree> newGrid = new ArrayList<>();
         for (QuadTree q : grid) {
@@ -173,7 +174,7 @@ public class Rasterer {
             }
         }
         grid = newGrid;
-        return latRows.size();
+        return latRows;
     }
 
     private Map<String, Object> sortRow(QuadTree[] tree) {
