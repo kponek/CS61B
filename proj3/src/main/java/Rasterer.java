@@ -184,20 +184,20 @@ public class Rasterer {
         return latRows;
     }
 
-    private Map<String, Object> sortRow(QuadTree[] tree) {
+    private Map<String, Object> sortRow(QuadTree[] quadTrees) {
         ArrayList<String> images = new ArrayList<>();
         ArrayList<Double> lonRows = new ArrayList<>();
         ArrayList<QuadTree> newTree = new ArrayList<>();
         Map<String, Object> ret = new HashMap<>();
-        for (QuadTree child : tree) {
+        for (QuadTree child : quadTrees) {
             lonRows.add(child.root.getUllong());
         }
         Collections.sort(lonRows);
         for (double d : lonRows) {
-            for (int i = 0; i < tree.length; i++) {
-                if (tree[i].root.getUllong() == d) {
-                    images.add(tree[i].root.getFilename() + ".png");
-                    newTree.add(tree[i]);
+            for (int i = 0; i < quadTrees.length; i++) {
+                if (quadTrees[i].root.getUllong() == d) {
+                    images.add(quadTrees[i].root.getFilename() + ".png");
+                    newTree.add(quadTrees[i]);
                 }
             }
         }
