@@ -1,3 +1,5 @@
+import org.junit.Test;
+
 /**
  * Class for doing Radix sort
  *
@@ -18,18 +20,47 @@ public class RadixSort {
     public static String[] sort(String[] asciis) {
         String[] res = new String[asciis.length];
         sortHelper(asciis, 0, asciis.length - 1, 0, res);
+//        for(int i = 0; i < asciis.length; i++){
+//            asciis[i] = res[i];
+//        }
         return asciis;
+
     }
 
     /**
      * Radix sort helper function that recursively calls itself to achieve the sorted array
      * destructive method that changes the passed in array, asciis
-     *
-     * @param asciis String[] to be sorted
-     * @param start  int for where to start sorting in this method (includes String at start)
-     * @param end    int for where to end sorting in this method (does not include String at end)
-     * @param index  the index of the character the method is currently sorting on
+     * <p>
+     * //
      **/
+
+
+    private static String printString(String[] arr) {
+        String res = "";
+        for (String s : arr) {
+            res += s + ", ";
+        }
+//        System.out.println(res);
+        return res;
+    }
+
+    private static String printArray(int[] arr, int start, int end) {
+        String res = "";
+        for (int i = start; i < end; i++) {
+            res += "i: " + i + " is " + Integer.toString(arr[i]) + ", ";
+        }
+//        System.out.println(res);
+        return res;
+    }
+
+    private static boolean indexAlwaysGreater(String[] arr, int ind) {
+        for (String s : arr) {
+            if (s.length() > ind) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private static void sortHelper(String[] asciis, int start, int end, int index, String[] aux) {
         if (end - start <= 1) {
@@ -67,4 +98,5 @@ public class RadixSort {
         if (d >= s.length()) return -1;
         return s.charAt(d);
     }
+
 }
