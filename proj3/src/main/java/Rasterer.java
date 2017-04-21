@@ -117,7 +117,7 @@ public class Rasterer {
 
     public void testQuadTree(QuadTree t) {
         //if (t.root.getUllong() == -122.2998046875) {
-            System.out.println(t.root.getFilename());
+        System.out.println(t.root.getFilename());
         //}
         for (QuadTree c : t.children) {
             if (c != null)
@@ -157,8 +157,8 @@ public class Rasterer {
     }
 
     private int numRows() {
-        ArrayList<QuadTree> newGrid = new ArrayList<>();
         ArrayList<Double> latRows = new ArrayList<>();
+        ArrayList<QuadTree> newGrid = new ArrayList<>();
         for (QuadTree q : grid) {
             if (!latRows.contains(q.root.getUllat())) {
                 latRows.add(q.root.getUllat());

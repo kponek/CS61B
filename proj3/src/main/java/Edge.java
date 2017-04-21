@@ -2,11 +2,12 @@
  * Created by kevin on 4/18/2017.
  */
 public class Edge {
+    GraphDB graph;
     private String name;
     private Point start;
     private Point end;
     private double length;
-    GraphDB graph;
+
 
     public Edge(Point a, Point b) {
         /*if (a.getId() == 3347105714L || b.getId() == 3347105714L) {
@@ -20,15 +21,19 @@ public class Edge {
         length = Math.sqrt(lonDiff * lonDiff + latDiff * latDiff);
     }
 
-    public double getLength() {
-        return length;
+    private String getName() {
+        return name;
     }
 
-    public Point getEnd() {
+    private Point getStart() {
+        return start;
+    }
+
+    private Point getEnd() {
         return end;
     }
 
-    public Point getStart() {
-        return start;
+    private double getLength() {
+        return length;
     }
 }

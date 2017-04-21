@@ -52,8 +52,6 @@ public class QuadTree {
     public QuadTree[] children;
 
     public QuadTree(double ullat, double ullong, double lrlat, double lrlong, String filename) {
-        /*root = new QuadNode(MapServer.ROOT_ULLAT, MapServer.ROOT_ULLON,
-                MapServer.ROOT_LRLAT, MapServer.ROOT_LRLON, null, null);*/
         root = new QuadNode(ullat, ullong, lrlat, lrlong, filename);
         children = new QuadTree[4];
         if (root.filename.length() == 11) {//img/ + 7 levels

@@ -1,39 +1,25 @@
 public class PQPoint implements Comparable {
-    Point pt;
-    double priority;
-    PQPoint prevNode;
-    double dist;
-    private Point targett;
+    private Point point;
+    private double priority;
+    private double distance;
+    private Point end;
 
-    public PQPoint(Point ptt, Point end, double distt) {
-        this.pt = ptt;
-        this.dist = distt;
-        this.targett = end;
-        this.priority = Finder.euclidDist(ptt, end) + distt;
+    public PQPoint(Point p, Point e, double d) {
+        point = p;
+        distance = d;
+        end = e;
+        this.priority = Finder.euclidDist(p, end) + distance;
     }
 
     @Override
     public int compareTo(Object o) {
-        double difference = this.getPriority() - ((PQPoint) o).getPriority();
-        if (difference < 0) {
-            return -1;
+        double difference = priority - ((PQPoint) o).getPriority();
+        if (difference == 0) {
+            return 0;
         } else if (difference > 0) {
             return 1;
         } else {
-            return 0;
-        }
-    }
-
-    public double getPriority() {
-        return this.priority;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || !o.getClass().equals(this.getClass())) {
-            return false;
-        } else {
-            return (this.pt.getId() == ((PQPoint) o).pt.getId());
+            return -1;
         }
     }
 
@@ -42,7 +28,29 @@ public class PQPoint implements Comparable {
         return super.hashCode();
     }
 
-    public void setPriority(double distance) {
-        this.priority = Finder.euclidDist(pt, this.targett) + distance;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !o.getClass().equals(this.getClass())) {
+            return false;
+        } else {
+            return (point.getId() == ((PQPoint) o).point.getId());
+        }
+    }
+
+
+    public Point getPoint() {
+        return point;
+    }
+
+    public double getPriority() {
+        return priority;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public Point getEnd() {
+        return end;
     }
 }

@@ -36,13 +36,12 @@ public class GraphBuildingHandler extends DefaultHandler {
                     "secondary_link", "tertiary_link"));
     private String activeState = "";
     private final GraphDB g;
-    private HashMap<Point, HashSet<Edge>> edges = new HashMap<>();
     private HashMap<Long, Point> nodes = new HashMap<>();
-    private ArrayList<Long> wayRefs = new ArrayList<>();
-    private boolean validEdge = false;
+    private HashMap<Point, HashSet<Edge>> edges = new HashMap<>();
     ArrayList<Point> wayEdge = new ArrayList<>();
-    String wayName;
-    Point node;
+    private boolean validEdge = false;
+    private String wayName;
+    private Point node;
 
     public GraphBuildingHandler(GraphDB g) {
         this.g = g;
@@ -75,10 +74,9 @@ public class GraphBuildingHandler extends DefaultHandler {
             //System.out.println("Node lon: " + attributes.getValue("lon"));
             //System.out.println("Node lat: " + attributes.getValue("lat"));
             long id = Long.parseLong(attributes.getValue("id"));
-            double lon = Double.parseDouble(attributes.getValue("lon"));
             double lat = Double.parseDouble(attributes.getValue("lat"));
+            double lon = Double.parseDouble(attributes.getValue("lon"));
             node = new Point(id, lat, lon);
-            /* TODO Use the above information to save a "node" to somewhere. */
             nodes.put(id, node);
             //GraphDB data = new GraphDB();
             /* Hint: A graph-like structure would be nice. KEVIN YOU ARE SO BEAUTIFUL I LOVE YOUUUUUUUUUUUU */
@@ -91,7 +89,6 @@ public class GraphBuildingHandler extends DefaultHandler {
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
             //System.out.println("Id of a node in this way: " + attributes.getValue("ref"));
-            /* TODO Use the above id to make "possible" connections between the nodes in this way */
             /* Hint1: It would be useful to remember what was the last node in this way. */
             /* Hint2: Not all ways are valid. So, directly connecting the nodes here would be
             cumbersome since you might have to remove the connections if you later see a tag that
@@ -105,28 +102,19 @@ public class GraphBuildingHandler extends DefaultHandler {
             String v = attributes.getValue("v");
             if (k.equals("maxspeed")) {
                 //System.out.println("Max Speed: " + v);
-                /* TODO set the max speed of the "current way" here. */
             } else if (k.equals("highway")) {
                 //System.out.println("Highway type: " + v);
-                /* TODO Figure out whether this way and its connections are valid. */
                 /* Hint: Setting a "flag" is good enough! */
-                if (ALLOWED_HIGHWAY_TYPES.contains(v)) {
-                    validEdge = true;
-                    /*for (int i = 1; i < wayRefs.size(); i++) {
-                        g.nodes.get(wayRefs.get(i)).addEdge(g.nodes.get(wayRefs.get(i + 1)));
-                    }*/
-                } else {
-                    validEdge = false;
-                }
+                validEdge = ALLOWED_HIGHWAY_TYPES.contains(v);
             } else if (k.equals("name")) {
                 //System.out.println("Way Name: " + v);
                 wayName = attributes.getValue("name");
             }
 //            System.out.println("Tag with k=" + k + ", v=" + v + ".");
-        } else if (activeState.equals("node") && qName.equals("tag") && attributes.getValue("k")
-                .equals("name")) {
+        } else if (activeState.equals("node")
+                && qName.equals("tag")
+                && attributes.getValue("k").equals("name")) {
             /* While looking at a node, we found a <tag...> with k="name". */
-            /* TODO Create a location. */
             /* Hint: Since we found this <tag...> INSIDE a node, we should probably remember which
             node this tag belongs to. Remember XML is parsed top-to-bottom, so probably it's the
             last node that you looked at (check the first if-case). */
@@ -166,7 +154,6 @@ public class GraphBuildingHandler extends DefaultHandler {
                 }*/
                 prevEdges.add(new Edge(first, second));
                 edges.put(first, prevEdges);
-
                 prevEdges = edges.get(second);
                 if (prevEdges == null) {
                     prevEdges = new HashSet<>();
@@ -174,9 +161,14 @@ public class GraphBuildingHandler extends DefaultHandler {
                 prevEdges.add(new Edge(second, first));
                 edges.put(second, prevEdges);
             }
+            //reset for the next element
             validEdge = false;
             wayEdge = new ArrayList<>();
         }
+    }
+
+    public GraphDB getG() {
+        return g;
     }
 
     public HashMap<Long, Point> getNodes() {
@@ -185,6 +177,14 @@ public class GraphBuildingHandler extends DefaultHandler {
 
     public HashMap<Point, HashSet<Edge>> getEdges() {
         return edges;
+    }
+
+    public String getWayName() {
+        return wayName;
+    }
+
+    public Point getNode() {
+        return node;
     }
 
 }

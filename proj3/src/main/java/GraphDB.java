@@ -26,7 +26,7 @@ public class GraphDB {
      *
      * @param dbPath Path to the XML file to be parsed.
      */
-    HashMap<Long, Point> nodes = new HashMap<>();
+    private HashMap<Long, Point> nodes = new HashMap<>();
     private HashMap<Point, HashSet<Edge>> edges = new HashMap<>();
     private HashMap<String, Point> nodeNames = new HashMap<>();
 
@@ -62,21 +62,10 @@ public class GraphDB {
      * we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        /*Iterable<Long> v = vertices();
-        for (long l : v) {
-            int adjCount = 0;
-            for (long a : adjacent(l)) {
-                adjCount++;
-            }
-            if (adjCount == 0) {
-                //removeNode(l);
-                nodes.remove(l);
-            }
-        }*/
         Iterator v = vertices().iterator();
         while (v.hasNext()) {
             Iterable<Long> adj = adjacent((Long) v.next());
-            if (adj instanceof Collection && ((Collection<?>) adj).size() == 0) {
+            if (((Collection<?>) adj).size() == 0 && adj instanceof Collection) {
                 v.remove();
             } else {
                 int count = 0;
@@ -90,16 +79,6 @@ public class GraphDB {
                 }
             }
         }
-        /*for (long l : v) {
-            int adjCount = 0;
-            for (long a : adjacent(l)) {
-                adjCount++;
-            }
-            if (adjCount == 0) {
-                //removeNode(l);
-                nodes.remove(l);
-            }
-        }*/
     }
 
     /**
@@ -183,5 +162,17 @@ public class GraphDB {
 
     public Point getNode(long id) {
         return nodes.get(id);
+    }
+
+    public HashMap<Point, HashSet<Edge>> getEdges() {
+        return edges;
+    }
+
+    public HashMap<Long, Point> getNodes() {
+        return nodes;
+    }
+
+    public HashMap<String, Point> getNodeNames() {
+        return nodeNames;
     }
 }
