@@ -84,7 +84,8 @@ public class Rasterer {
         int cols = grid.size() / rows;
         QuadTree[][] map = new QuadTree[rows][cols];
         String[][] images = new String[rows][cols];
-        //add items to map, where each item is on the right row but needs to be in the right column still
+        //add items to map, where each item is on the right
+        // row but needs to be in the right column still
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 map[r][c] = grid.remove(grid.size() - 1);
@@ -124,14 +125,16 @@ public class Rasterer {
         System.out.println(t.root.getFilename());
         //}
         for (QuadTree c : t.children) {
-            if (c != null)
+            if (c != null) {
                 testQuadTree(c);
+            }
         }
     }
 
     public void matches(QuadTree qt, Map<String, Double> params) {
         //System.out.println(qt.root.getFilename());
-        //System.out.println("ullat: " + qt.root.getUllat() + " ullon: " + qt.root.getUllong() + " lrlat: " + qt.root.getLrlat() + " lrlon: " + qt.root.getLrlong());
+        //System.out.println("ullat: " + qt.root.getUllat() + " ullon: " + qt.root.getUllong()
+        // + " lrlat: " + qt.root.getLrlat() + " lrlon: " + qt.root.getLrlong());
         if (qt.root.getFilename().equals("img/")) {
             for (QuadTree c : qt.children) {
                 matches(c, params);
@@ -142,15 +145,19 @@ public class Rasterer {
         } else if (qt.lonDPPsmallerThanOrIsLeaf((params.get("lrlon")
                 - params.get("ullon"))
                 / params.get("w")) || qt.root.getFilename().length() >= 11) {
-            //System.out.println("query londpp: " + (params.get("lrlon") - params.get("ullon")) / params.get("w"));
+            //System.out.println("query londpp: "
+            // + (params.get("lrlon")
+            // - params.get("ullon")) / params.get("w"));
             //System.out.println("tile londpp: " + qt.getLonDPP());
-            //if (qt.intersectsTile(params.get("ullat"), params.get("ullon"), params.get("lrlat"), params.get("lrlon"))) {
+            //if (qt.intersectsTile(params.get("ullat"), params.get("ullon"),
+            // params.get("lrlat"), params.get("lrlon"))) {
             //System.out.println("londpp smaller and intersect");
             grid.add(qt);
         } else {
             //System.out.println("uh");
             for (QuadTree c : qt.children) {
-                //if (c.intersectsTile(params.get("ullat"), params.get("ullon"), params.get("lrlat"), params.get("lrlon"))) {
+                //if (c.intersectsTile(params.get("ullat"), params.get("ullon"),
+                // params.get("lrlat"), params.get("lrlon"))) {
                 matches(c, params);
                 //}
             }
