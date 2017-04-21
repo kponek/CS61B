@@ -26,8 +26,8 @@ public class GraphDB {
      *
      * @param dbPath Path to the XML file to be parsed.
      */
-    Map<Long, Point> nodes = new HashMap<>();
-    private Map<Point, HashSet<Edge>> edges;
+    HashMap<Long, Point> nodes = new HashMap<>();
+    private HashMap<Point, HashSet<Edge>> edges = new HashMap<>();
     private HashMap<String, Point> nodeNames = new HashMap<>();
 
     public GraphDB(String dbPath) {

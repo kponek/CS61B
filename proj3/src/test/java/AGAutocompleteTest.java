@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 public class AGAutocompleteTest extends AGMapTest {
     /**
      * Test Autocomplete for each prefix, comparing the sets of outputs against each other.
+     *
      * @throws Exception
      */
     @Test
@@ -28,6 +29,7 @@ public class AGAutocompleteTest extends AGMapTest {
      * Test location search by full search string, comparing the output lists against each other
      * element by element; note that we assume the most reasonable construction of each of these
      * lists, that is, that they are in order of the locations as they appear in the OSM file.
+     *
      * @throws Exception
      */
     @Test

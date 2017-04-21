@@ -6,6 +6,7 @@ public class Edge {
     private Point start;
     private Point end;
     private double length;
+    GraphDB graph;
 
     public Edge(Point a, Point b) {
         /*if (a.getId() == 3347105714L || b.getId() == 3347105714L) {

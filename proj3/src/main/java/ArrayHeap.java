@@ -13,7 +13,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     private int size;
 
     public ArrayHeap() {
-        contents = new ArrayHeap.Node[16];
+        contents = new ArrayHeap.Node[100];
 
         /* Add a dummy item at the front of the ArrayHeap so that the getLeft,
          * getRight, and parent methods are nicer. */

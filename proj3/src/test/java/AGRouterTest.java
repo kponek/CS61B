@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 public class AGRouterTest extends AGMapTest {
     /**
      * Test the route-finding functionality by comparing the node id list item by item.
+     *
      * @throws Exception
      */
     @Test

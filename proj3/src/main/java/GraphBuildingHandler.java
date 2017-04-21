@@ -37,7 +37,7 @@ public class GraphBuildingHandler extends DefaultHandler {
     private String activeState = "";
     private final GraphDB g;
     private HashMap<Point, HashSet<Edge>> edges = new HashMap<>();
-    private Map<Long, Point> nodes = new HashMap<>();
+    private HashMap<Long, Point> nodes = new HashMap<>();
     private ArrayList<Long> wayRefs = new ArrayList<>();
     private boolean validEdge = false;
     ArrayList<Point> wayEdge = new ArrayList<>();
@@ -179,7 +179,7 @@ public class GraphBuildingHandler extends DefaultHandler {
         }
     }
 
-    public Map<Long, Point> getNodes() {
+    public HashMap<Long, Point> getNodes() {
         return nodes;
     }
 
