@@ -60,14 +60,11 @@ public class RadixSort {
         return Math.max(max, 0);
     }
 
-    // returns the ASCII key of the char at letterIndex in word + 1.
-    // if there is no char, returns 0.
     private static int getLetterValFromString(int letterIndex, String word) {
         int letterVal;
         try {
             letterVal = (int) word.charAt(letterIndex);
         } catch (IndexOutOfBoundsException e) {
-            //System.out.println(word + " doesn't have " + letterIndex + " length.");
             letterVal = 0;
         }
         return letterVal;
@@ -77,82 +74,29 @@ public class RadixSort {
         int[] newIndices = new int[257];
         String word;
         int letterVal;
-        // upating the counts of each ASCII value
         for (int wordIndex = start; wordIndex < end; wordIndex++) {
             word = arr[wordIndex];
             letterVal = getLetterValFromString(letterIndex, word);
             newIndices[letterVal]++;
         }
-        // changing to the new indices.
-        // start at 1 because 0th elem stays the same.
-        //System.out.println("\nnew indices are: ");
         for (int index = 1; index < newIndices.length; index++) {
             newIndices[index] += newIndices[index - 1];
-            //System.out.print(newIndices[index] + " ");
         }
-        //System.out.print("\n");
         return newIndices;
     }
 
-    // also mutates newIndices array.
     private static void reorderArrayOnIndex(int letterIndex, String[] arr, int[] newIndices,
                                             int start, int end) {
         String[] newArr = new String[end - start];
         String word;
         int letterVal;
         int newIndex;
-        //System.out.println("the indices are ");
-        //print(newIndices);
-        // reversing through array so that sorting works.
         for (int index = end - 1; index >= start; index--) {
             word = arr[index];
             letterVal = getLetterValFromString(letterIndex, word);
             newIndex = --newIndices[letterVal];
             newArr[newIndex] = word;
         }
-        // fuck me
         System.arraycopy(newArr, 0, arr, start, newArr.length);
-    }
-
-    public static void main(String[] args) {
-        String[] words = {"neverland", "will", "the", "before", "at", "need", "swindling",
-                "weather", "whether", "thread", "house", "tree", "seven", "eleven", "house",
-                "can", "peas", "surrender", "tiger", "theft", "honk", "big", "swindle", "meniscus",
-                "how", "enunciate", "cheese", "almight", "swear", "hear", "fart", "pass", "class",
-                "molasses", "the"};
-        for (String word : words) {
-            System.out.print(word + " ");
-        }
-        System.out.println("\n");
-        String[] sorted = RadixSort.sort(words);
-        System.out.println("\n");
-        for (String word : sorted) {
-            System.out.print(word + " ");
-        }
-        System.out.println("\n");
-    }
-
-    private static void print(String[] arr) {
-        System.out.println("");
-        for (Object elem : arr) {
-            System.out.print(elem.toString() + " ");
-        }
-        System.out.println("");
-    }
-
-    private static void print(String[] arr, int start, int end) {
-        System.out.println("");
-        for (int i = start; i < end; i++) {
-            System.out.print(arr[i].toString() + " ");
-        }
-        System.out.println("");
-    }
-
-    private static void print(int[] arr) {
-        System.out.println("");
-        for (Object elem : arr) {
-            System.out.print(elem.toString() + " ");
-        }
-        System.out.println("");
     }
 }
