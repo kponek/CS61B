@@ -80,10 +80,10 @@ public class SeamCarver {
     // sequence of indices for vertical seam
     public int[] findVerticalSeam() {
         int[] seam = new int[height()];
-        energies = new double[width()][height()];
-        dist = new int[width()][height()];
         double minEnergy = Double.MAX_VALUE;
         int minEnergyDist = -1;
+        energies = new double[width()][height()];
+        dist = new int[width()][height()];
         //set all values to infinity (max val)
         for (int i = 0; i < width(); i++) {
             for (int j = 0; j < height(); j++) {
