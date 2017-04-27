@@ -10,28 +10,24 @@ public class SeamCarver {
     private Picture pic;
     private double[][] energy;
     private double[][] energySums;
-    private int width;
-    private int height;
 
     public SeamCarver(Picture picture) {
-        this.pic = new Picture(picture);
-        this.width = picture.width();
-        this.height = picture.height();
-        this.energy = createEnergyArray(picture);
+        pic = new Picture(picture);
+        energy = createEnergyArray(picture);
 
-        this.energySums = calculateEnergySums(this.energy, width, height);
+        energySums = calculateEnergySums(this.energy, picture.width(), picture.height());
     }
 
     public Picture picture() {
-        return new Picture(pic);
+        return pic;
     }
 
     public int width() {
-        return width;
+        return pic.width();
     }
 
     public int height() {
-        return height;
+        return pic.height();
     }
 
     public double energy(int x, int y) {
@@ -66,40 +62,6 @@ public class SeamCarver {
         return rx * rx + gx * gx + bx * bx + ry * ry + gy * gy + by * by;
     }
 
-    private double calcDiff(Color small, Color large) {
-        int red = large.getRed() - small.getRed();
-        int green = large.getGreen() - small.getGreen();
-        int blue = large.getBlue() - small.getBlue();
-        return red * red + green * green + blue * blue;
-    }
-
-    private double initiliazeEnergy(int x, int y, Picture p) {
-        int startX = x;
-        int startY = y;
-        int w = p.width();
-        int h = p.height();
-        int rightX = (x + 1) % w;
-        int leftX;
-        if (x == 0) {
-            leftX = w - 1;
-        } else {
-            leftX = x - 1;
-        }
-        int downY = (y + 1) % h;
-        int upY;
-        if (y == 0) {
-            upY = h - 1;
-        } else {
-            upY = y - 1;
-        }
-        Color left = p.get(leftX, y);
-        Color right = p.get(rightX, y);
-        Color down = p.get(x, downY);
-        Color up = p.get(x, upY);
-        double diffX = calcDiff(left, right);
-        double diffY = calcDiff(up, down);
-        return diffX + diffY;
-    }
 
     private double[][] createEnergyArray(Picture p) {
         int w = p.width();
@@ -107,7 +69,7 @@ public class SeamCarver {
         double[][] energyArray = new double[h][w];
         for (int y = 0; y < h; y += 1) {
             for (int x = 0; x < w; x += 1) {
-                energyArray[y][x] = initiliazeEnergy(x, y, p);
+                energyArray[y][x] = energy(x, y);
             }
         }
         return energyArray;
@@ -128,7 +90,7 @@ public class SeamCarver {
                     } else {
                         left = sum[y - 1][x - 1] + e[y][x];
                     }
-                    if (right >= width) {
+                    if (right >= width()) {
                         right = Double.MAX_VALUE;
                     } else {
                         right = sum[y - 1][x + 1] + e[y][x];
@@ -182,7 +144,7 @@ public class SeamCarver {
     }
 
     public int[] findVerticalSeam() {
-        return findSeams(this.energySums, width, height);
+        return findSeams(this.energySums, width(), height());
     }
 
     public int[] findHorizontalSeam() {
