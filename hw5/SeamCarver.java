@@ -83,43 +83,46 @@ public class SeamCarver {
         energies = new double[width()][height()];
         dist = new int[width()][height()];
         double minEnergy = Double.MAX_VALUE;
-        int minEnergyX = -1;
+        int minEnergyDist = -1;
+        //set all values to infinity (max val)
         for (int i = 0; i < width(); i++) {
             for (int j = 0; j < height(); j++) {
                 energies[i][j] = Double.MAX_VALUE;
             }
         }
-        for (int x = 0; x < width(); x++) {
-            energies[x][0] = 195075.0;
+        //set first row to be max energies
+        for (int i = 0; i < width(); i++) {
+            energies[i][0] = 195075.0;
         }
-
-        for (int y = 0; y < height() - 1; y++) {
-            for (int x = 0; x < width(); x++) {
-                if (x > 0) {
-                    findDist(x, y, x - 1, y + 1);
+        //relax
+        for (int j = 0; j < height() - 1; j++) {
+            for (int i = 0; i < width(); i++) {
+                if (i > 0) {
+                    findDist(i, j, i - 1, j + 1);
                 }
 
-                findDist(x, y, x, y + 1);
+                findDist(i, j, i, j + 1);
 
-                if (x < width() - 1) {
-                    findDist(x, y, x + 1, y + 1);
+                if (i < width() - 1) {
+                    findDist(i, j, i + 1, j + 1);
                 }
             }
         }
-        for (int w = 0; w < width(); w++) {
-            if (energies[w][height() - 1] < minEnergy) {
-                minEnergyX = w;
-                minEnergy = energies[w][height() - 1];
+        //find which path was shortest iteratively
+        for (int i = 0; i < width(); i++) {
+            if (energies[i][height() - 1] < minEnergy) {
+                minEnergyDist = i;
+                minEnergy = energies[i][height() - 1];
             }
         }
-        assert minEnergyX != -1;
+        //assert minEnergyDist != -1;
 
-        seam[height() - 1] = minEnergyX;
-        int prevX = dist[minEnergyX][height() - 1];
+        seam[height() - 1] = minEnergyDist;
+        int prevDist = dist[minEnergyDist][height() - 1];
 
-        for (int h = height() - 2; h >= 0; h--) {
-            seam[h] = prevX;
-            prevX = dist[prevX][h];
+        for (int j = height() - 2; j >= 0; j--) {
+            seam[j] = prevDist;
+            prevDist = dist[prevDist][j];
         }
 
         return seam;
