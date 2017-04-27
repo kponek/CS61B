@@ -1,6 +1,9 @@
 /**
  * Created by kevin on 4/26/2017.
  */
+
+import edu.princeton.cs.algs4.Picture;
+
 public class SeamCarver {
     private Picture pic;
     double[][] energies;
