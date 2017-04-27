@@ -1,9 +1,3 @@
-/**
- * Created by kevin on 4/26/2017.
- */
-
-import java.awt.Color;
-
 import edu.princeton.cs.algs4.Picture;
 
 public class SeamCarver {
