@@ -2,9 +2,9 @@
  * Created by kevin on 4/26/2017.
  */
 
-import edu.princeton.cs.algs4.Picture;
-
 import java.awt.Color;
+
+import edu.princeton.cs.algs4.Picture;
 
 public class SeamCarver {
     private Picture pic;
@@ -131,7 +131,6 @@ public class SeamCarver {
                     if (right >= width) {
                         right = Double.MAX_VALUE;
                     } else {
-                        // System.out.println(right + " " + width);
                         right = sum[y - 1][x + 1] + e[y][x];
                     }
                     if (left < middle & left < right) {
@@ -148,8 +147,8 @@ public class SeamCarver {
     }
 
     private int[] findSeams(double[][] e, int w, int h) {
+        double min = Double.POSITIVE_INFINITY;
         int[] sol = new int[h];
-        double min = Double.MAX_VALUE;
         for (int x = 0; x < w; x += 1) {
             if (e[h - 1][x] < min) {
                 min = e[h - 1][x];
@@ -161,29 +160,21 @@ public class SeamCarver {
             double left = root - 1;
             double middle = e[y][root];
             double right = root + 1;
-            if (left < 0) {
-                // System.out.println("FAILED DONT USE LEFT: root " + root + " root - 1 " + (root - 1) + " width " + width);
-                left = Double.MAX_VALUE;
-            } else {
-                left = e[y][root - 1];
-            }
             if (right >= w) {
-                // System.out.println("FAILED DONT USE RIGHT: root " + root + " root + 1 " + (root + 1) + " width " + width);
-                right = Double.MAX_VALUE;
+                right = Double.POSITIVE_INFINITY;
             } else {
                 right = e[y][root + 1];
             }
-            if (left < middle && left < right) {
-                // System.out.println("At " + e[y + 1][root] + " picked left");
-                // System.out.println(left + " < " + middle + " && " + left + " < " + right);
-                sol[y] = sol[y + 1] - 1;
-            } else if (right < middle && right < left) {
-                // System.out.println("At " + e[y + 1][root] + " picked right");
-                // System.out.println(right + " < " + middle + " && " + right + " < " + left);
-                sol[y] = sol[y + 1] + 1;
+            if (left < 0) {
+                left = Double.POSITIVE_INFINITY;
             } else {
-                // System.out.println("At " + e[y + 1][root] + " picked middle");
-                // System.out.println(middle + " < " + left + " && " + middle + " < " + right);
+                left = e[y][root - 1];
+            }
+            if (right < middle && right < left) {
+                sol[y] = sol[y + 1] + 1;
+            } else if (left < middle && left < right) {
+                sol[y] = sol[y + 1] - 1;
+            } else {
                 sol[y] = sol[y + 1];
             }
         }
@@ -191,8 +182,7 @@ public class SeamCarver {
     }
 
     public int[] findVerticalSeam() {
-        int[] seam = findSeams(this.energySums, width, height);
-        return seam;
+        return findSeams(this.energySums, width, height);
     }
 
     public int[] findHorizontalSeam() {
