@@ -4,40 +4,47 @@
 
 import edu.princeton.cs.algs4.Picture;
 
+import java.awt.Color;
+
 public class SeamCarver {
     private Picture pic;
-    double[][] energies;
-    int[][] dist;
+    private double[][] energy;
+    private double[][] energySums;
+    private int width;
+    private int height;
 
     public SeamCarver(Picture picture) {
-        pic = picture;
-        energies = new double[width()][height()];
+        this.pic = new Picture(picture);
+        this.width = picture.width();
+        this.height = picture.height();
+        this.energy = createEnergyArray(picture);
+
+        this.energySums = calculateEnergySums(this.energy, width, height);
     }
 
-    // current picture
     public Picture picture() {
-        return pic;
+        return new Picture(pic);
     }
 
-    // width of current picture
     public int width() {
-        return pic.width();
+        return width;
     }
 
-    // height of current picture
     public int height() {
-        return pic.height();
+        return height;
     }
 
-    // energy of pixel at column x and row y
     public double energy(int x, int y) {
         if (x < 0 || x >= width() || y < 0 || y >= height()) {
             throw new IndexOutOfBoundsException();
         }
         int addX = x + 1;
-        int subX = x + 1;
+        int subX = x - 1;
         int addY = y + 1;
         int subY = y - 1;
+        //if (x == 0 || x == width() - 1 || y == 0 || y == height() - 1) {
+        //    return 195075.0;
+        //}
         if (addX == width()) {
             addX = 0;
         }
@@ -59,7 +66,135 @@ public class SeamCarver {
         return rx * rx + gx * gx + bx * bx + ry * ry + gy * gy + by * by;
     }
 
-    // sequence of indices for horizontal seam
+    private double calcDiff(Color small, Color large) {
+        int red = large.getRed() - small.getRed();
+        int green = large.getGreen() - small.getGreen();
+        int blue = large.getBlue() - small.getBlue();
+        return red * red + green * green + blue * blue;
+    }
+
+    private double initiliazeEnergy(int x, int y, Picture p) {
+        int startX = x;
+        int startY = y;
+        int w = p.width();
+        int h = p.height();
+        int rightX = (x + 1) % w;
+        int leftX;
+        if (x == 0) {
+            leftX = w - 1;
+        } else {
+            leftX = x - 1;
+        }
+        int downY = (y + 1) % h;
+        int upY;
+        if (y == 0) {
+            upY = h - 1;
+        } else {
+            upY = y - 1;
+        }
+        Color left = p.get(leftX, y);
+        Color right = p.get(rightX, y);
+        Color down = p.get(x, downY);
+        Color up = p.get(x, upY);
+        double diffX = calcDiff(left, right);
+        double diffY = calcDiff(up, down);
+        return diffX + diffY;
+    }
+
+    private double[][] createEnergyArray(Picture p) {
+        int w = p.width();
+        int h = p.height();
+        double[][] energyArray = new double[h][w];
+        for (int y = 0; y < h; y += 1) {
+            for (int x = 0; x < w; x += 1) {
+                energyArray[y][x] = initiliazeEnergy(x, y, p);
+            }
+        }
+        return energyArray;
+    }
+
+    private double[][] calculateEnergySums(double[][] e, int w, int h) {
+        double[][] sum = new double[h][w];
+        for (int y = 0; y < h; y += 1) {
+            for (int x = 0; x < w; x += 1) {
+                if (y == 0) {
+                    sum[y][x] = e[y][x];
+                } else {
+                    double left = x - 1;
+                    double middle = sum[y - 1][x] + e[y][x];
+                    double right = x + 1;
+                    if (left < 0) {
+                        left = Double.MAX_VALUE;
+                    } else {
+                        left = sum[y - 1][x - 1] + e[y][x];
+                    }
+                    if (right >= width) {
+                        right = Double.MAX_VALUE;
+                    } else {
+                        // System.out.println(right + " " + width);
+                        right = sum[y - 1][x + 1] + e[y][x];
+                    }
+                    if (left < middle & left < right) {
+                        sum[y][x] = left;
+                    } else if (right < left && right < middle) {
+                        sum[y][x] = right;
+                    } else {
+                        sum[y][x] = middle;
+                    }
+                }
+            }
+        }
+        return sum;
+    }
+
+    private int[] findSeams(double[][] e, int w, int h) {
+        int[] sol = new int[h];
+        double min = Double.MAX_VALUE;
+        for (int x = 0; x < w; x += 1) {
+            if (e[h - 1][x] < min) {
+                min = e[h - 1][x];
+                sol[h - 1] = x;
+            }
+        }
+        for (int y = h - 2; y >= 0; y -= 1) {
+            int root = sol[y + 1];
+            double left = root - 1;
+            double middle = e[y][root];
+            double right = root + 1;
+            if (left < 0) {
+                // System.out.println("FAILED DONT USE LEFT: root " + root + " root - 1 " + (root - 1) + " width " + width);
+                left = Double.MAX_VALUE;
+            } else {
+                left = e[y][root - 1];
+            }
+            if (right >= w) {
+                // System.out.println("FAILED DONT USE RIGHT: root " + root + " root + 1 " + (root + 1) + " width " + width);
+                right = Double.MAX_VALUE;
+            } else {
+                right = e[y][root + 1];
+            }
+            if (left < middle && left < right) {
+                // System.out.println("At " + e[y + 1][root] + " picked left");
+                // System.out.println(left + " < " + middle + " && " + left + " < " + right);
+                sol[y] = sol[y + 1] - 1;
+            } else if (right < middle && right < left) {
+                // System.out.println("At " + e[y + 1][root] + " picked right");
+                // System.out.println(right + " < " + middle + " && " + right + " < " + left);
+                sol[y] = sol[y + 1] + 1;
+            } else {
+                // System.out.println("At " + e[y + 1][root] + " picked middle");
+                // System.out.println(middle + " < " + left + " && " + middle + " < " + right);
+                sol[y] = sol[y + 1];
+            }
+        }
+        return sol;
+    }
+
+    public int[] findVerticalSeam() {
+        int[] seam = findSeams(this.energySums, width, height);
+        return seam;
+    }
+
     public int[] findHorizontalSeam() {
         transpose();
         int[] horizSeam = findVerticalSeam();
@@ -73,87 +208,18 @@ public class SeamCarver {
         for (int i = 0; i < width(); i++) {
             for (int j = 0; j < height(); j++) {
                 transPic.set(j, i, pic.get(i, j));
-                transEnergies[j][i] = energies[i][j];
+                transEnergies[j][i] = energy[i][j];
             }
         }
         pic = transPic;
-        energies = transEnergies;
+        energy = transEnergies;
     }
 
-    // sequence of indices for vertical seam
-    public int[] findVerticalSeam() {
-        int[] seam = new int[height()];
-        double minEnergy = Double.MAX_VALUE;
-        int minEnergyDist = -1;
-        energies = new double[width()][height()];
-        dist = new int[width()][height()];
-        //set all values to infinity (max val)
-        for (int i = 0; i < width(); i++) {
-            for (int j = 0; j < height(); j++) {
-                energies[i][j] = Double.MAX_VALUE;
-            }
-        }
-        //set first row to be max energies
-        for (int i = 0; i < width(); i++) {
-            energies[i][0] = 195075.0;
-        }
-        //relax
-        for (int j = 0; j < height() - 1; j++) {
-            for (int i = 0; i < width(); i++) {
-                if (i > 0) {
-                    findDist(i, j, i - 1, j + 1);
-                }
-
-                findDist(i, j, i, j + 1);
-
-                if (i < width() - 1) {
-                    findDist(i, j, i + 1, j + 1);
-                }
-            }
-        }
-        //find which path was shortest iteratively
-        for (int i = 0; i < width(); i++) {
-            if (energies[i][height() - 1] < minEnergy) {
-                minEnergyDist = i;
-                minEnergy = energies[i][height() - 1];
-            }
-        }
-        //assert minEnergyDist != -1;
-
-        seam[height() - 1] = minEnergyDist;
-        int prevDist = dist[minEnergyDist][height() - 1];
-
-        for (int j = height() - 2; j >= 0; j--) {
-            seam[j] = prevDist;
-            prevDist = dist[prevDist][j];
-        }
-
-        return seam;
-
-    }
-
-    // remove horizontal seam from picture
     public void removeHorizontalSeam(int[] seam) {
 
     }
 
-    // remove vertical seam from picture
     public void removeVerticalSeam(int[] seam) {
 
-    }
-
-    private void calcEnergies() {
-        for (int i = 0; i < width(); i++) {
-            for (int j = 0; j < height(); j++) {
-                energies[i][j] = energy(i, j);
-            }
-        }
-    }
-
-    private void findDist(int x1, int y1, int x2, int y2) {
-        if (energies[x2][y2] > energies[x1][y1] + energy(x2, y2)) {
-            energies[x2][y2] = energies[x1][y1] + energy(x2, y2);
-            dist[x1][y2] = x1;
-        }
     }
 }
