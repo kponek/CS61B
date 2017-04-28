@@ -19,7 +19,7 @@ public class HuffmanEncoder {
     }
 
     public static void main(String[] args) {
-        String filename = "watermelonsugar.txt";
+        String filename = args[0];
         //1
         char[] chars = FileUtils.readFile(filename);
         //2
