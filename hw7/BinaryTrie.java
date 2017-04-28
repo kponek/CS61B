@@ -82,8 +82,12 @@ public class BinaryTrie implements Serializable {
         if (n.character != ' ') {
             searchBits.put(n.character, new BitSequence(bits));
         } else {
-            buildHelper(n.left, bits + "0", searchBits);
-            buildHelper(n.right, bits + "1", searchBits);
+            if (n.left != null) {
+                buildHelper(n.left, bits + "0", searchBits);
+            }
+            if (n.right != null) {
+                buildHelper(n.right, bits + "1", searchBits);
+            }
         }
     }
 }
