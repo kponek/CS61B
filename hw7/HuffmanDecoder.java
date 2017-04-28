@@ -5,8 +5,8 @@ import java.util.ArrayList;
  */
 public class HuffmanDecoder {
     public static void main(String[] args) {
-        String encodedFile = args[0];
-        String decodedFile = args[1];
+        String encodedFile = "watermelonsugar.txt.huf";
+        String decodedFile = "ws.txt";
         //1
         ObjectReader or = new ObjectReader(encodedFile);
         Object trie = or.readObject();
@@ -22,8 +22,13 @@ public class HuffmanDecoder {
             //4c
             bits = ((BitSequence) bits).allButFirstNBits(m.getSequence().length());
         }
-
-        ObjectWriter ow = new ObjectWriter(decodedFile);
-        ow.writeObject(prefixes);
+        //5
+        //ObjectWriter ow = new ObjectWriter(decodedFile);
+        //ow.writeObject(prefixes);
+        char[] matchChars = new char[prefixes.size()];
+        for (int i = 0; i < prefixes.size(); i++) {
+            matchChars[i] = prefixes.get(i).getSymbol();
+        }
+        FileUtils.writeCharArray(decodedFile, matchChars);
     }
 }
