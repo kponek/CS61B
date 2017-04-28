@@ -19,7 +19,7 @@ public class HuffmanEncoder {
     }
 
     public static void main(String[] args) {
-        String filename = args[0];
+        String filename = "watermelonsugar.txt";
         //1
         char[] chars = FileUtils.readFile(filename);
         //2
@@ -38,7 +38,9 @@ public class HuffmanEncoder {
         }*/
         //8
         for (char c : chars) {
+            //if (c != ' ') {
             bitSequences.add(lookTable.get(c));
+            //}
         }
         //9
         BitSequence bits = BitSequence.assemble(bitSequences);
