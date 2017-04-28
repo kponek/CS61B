@@ -1,5 +1,4 @@
 import edu.princeton.cs.algs4.MinPQ;
-import javafx.scene.layout.Priority;
 
 import java.io.Serializable;
 import java.util.HashMap;
