@@ -1,4 +1,6 @@
-public class Match {
+import java.io.Serializable;
+
+public class Match implements Serializable{
     private BitSequence sequence;
     private Character symbol;
     

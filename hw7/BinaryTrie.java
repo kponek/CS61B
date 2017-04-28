@@ -11,7 +11,7 @@ public class BinaryTrie implements Serializable {
     private Node root;
 
     //this Node class is inspired by Huffman.java from princeton library
-    private class Node implements Comparable<Node> {
+    private class Node implements Comparable<Node>, Serializable {
         private char character;
         private int frequency;
         private Node left;

@@ -5,8 +5,8 @@ import java.util.ArrayList;
  */
 public class HuffmanDecoder {
     public static void main(String[] args) {
-        String encodedFile = args[0];
-        String decodedFile = args[1];
+        String encodedFile = "watermelonsugar.txt.huf";
+        String decodedFile = "ws.txt";
         //1
         ObjectReader or = new ObjectReader(encodedFile);
         Object trie = or.readObject();
