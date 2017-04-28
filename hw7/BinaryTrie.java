@@ -48,7 +48,7 @@ public class BinaryTrie implements Serializable {
                 right = pq.delMin();
             }
 
-            Node parent = new Node('*', left.frequency + right.frequency, left, right);
+            Node parent = new Node('\0', left.frequency + right.frequency, left, right);
             pq.insert(parent);
         }
         root = pq.delMin();
@@ -64,7 +64,7 @@ public class BinaryTrie implements Serializable {
             } else {
                 cur = cur.right;
             }
-            if (cur.character != (' ')) {
+            if (cur.character != ('\0')) {
                 return new Match(new BitSequence(match), cur.character);
             }
         }
@@ -79,7 +79,7 @@ public class BinaryTrie implements Serializable {
     }
 
     private void buildHelper(Node n, String bits, Map<Character, BitSequence> searchBits) {
-        if (n.character != '*') {
+        if (n.character != '\0') {
             searchBits.put(n.character, new BitSequence(bits));
         } else {
             if (n.left != null) {
